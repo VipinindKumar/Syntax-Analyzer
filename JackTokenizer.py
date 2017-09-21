@@ -4,7 +4,8 @@ class JackTokenizer:
     whitespace, comments etc.'''
     
     def __init__(self, inFile):
-        'constructor for JackTokenizer'
+        '''constructor for JackTokenizer open the
+        inFile and get ready to tokenize it'''
         
     
     def hasMoreTokens():
