@@ -56,4 +56,11 @@ class CompilationEngine:
         'Compiles an expression'
         
     
+    def compileTerm(self):
+        'Compiles a Term'
+        
+    
+    def compileExpressionList(self):
+        'Compiles(possibly empty) comma separated list of expressions'
+        
     
