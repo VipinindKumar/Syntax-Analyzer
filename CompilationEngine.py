@@ -21,7 +21,39 @@ class CompilationEngine:
         
     
     def CompileParameterList(self):
-        'Compiles a parameter list not including the enclosing ()'
+        'Compiles a parameter list(possibly empty) not including the enclosing ()'
+        
+    
+    def compileVarDec(self):
+        'compiles a variable declaration'
+        
+    
+    def compileStatements(self):
+        'Compiles series of statements, without {}'
+        
+    
+    def compileDo(self):
+        'Compiles a do statement'
+        
+    
+    def compileLet(self):
+        'Compiles a Let statement'
+        
+    
+    def compileWhile(self):
+        'Compiles a while statement'
+        
+    
+    def compileReturn(self):
+        'Compiles a return statement'
+        
+    
+    def compileIf(self):
+        'Compiles an If statement, possibly with a trailing else clause'
+        
+    
+    def compileExpression(self):
+        'Compiles an expression'
         
     
     
