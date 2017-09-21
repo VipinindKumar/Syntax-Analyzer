@@ -18,3 +18,10 @@ class JackTokenizer:
         hasMoreTokens return True'''
         
     
+    def tokenType(self):
+        '''Return the current token type;
+        KEYWORD | SYMBOL | IDENTIFIER | 
+        INT_CONST | STRING_CONST'''
+        
+    
+    
