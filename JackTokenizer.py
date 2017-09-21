@@ -8,5 +8,7 @@ class JackTokenizer:
         inFile and get ready to tokenize it'''
         
     
-    def hasMoreTokens():
-        ''
+    def hasMoreTokens(self):
+        'True if there is more tokens to process'
+        
+    
