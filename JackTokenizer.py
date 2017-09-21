@@ -24,4 +24,9 @@ class JackTokenizer:
         INT_CONST | STRING_CONST'''
         
     
+    def Keyword(self):
+        '''Returns the current token if 
+        tokenType is KEYWORD'''
+        
+    
     
