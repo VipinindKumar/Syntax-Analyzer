@@ -12,3 +12,9 @@ class JackTokenizer:
         'True if there is more tokens to process'
         
     
+    def advance(self):
+        '''Get the next token from the input and
+        make it the current token. Called when
+        hasMoreTokens return True'''
+        
+    
