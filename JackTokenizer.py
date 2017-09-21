@@ -29,4 +29,20 @@ class JackTokenizer:
         tokenType is KEYWORD'''
         
     
+    def symbol(self):
+        'Returns the character which is the current token'
+        
+    
+    def identifier(self):
+        'Returns the identifier which is the current token'
+        
+    
+    def intVal(self):
+        'Returns the integer value of the current token'
+        
+    
+    def stringVal(self):
+        '''Returns the String value of the current token
+        without the double quotes'''
+        
     
