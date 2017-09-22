@@ -7,7 +7,14 @@ class JackTokenizer:
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
         'Read one character at a time'
-        
+        self.__openFile(inFile)
+    
+    def __openFile(self, file):
+        'Create a generator by opening the file'
+        with open(file) as jackFile:
+            for line in jackFile:
+                for character in line:
+                    yield character
     
     def hasMoreTokens(self):
         'True if there is more tokens to process'
