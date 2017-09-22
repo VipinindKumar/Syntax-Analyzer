@@ -7,7 +7,7 @@ class JackTokenizer:
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
         'Read one character at a time'
-        self.__openFile(inFile)
+        inFile = self.__openFile(inFile)
     
     def __openFile(self, file):
         'Create a generator by opening the file'
