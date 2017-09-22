@@ -6,11 +6,12 @@ class JackTokenizer:
     def __init__(self, inFile):
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
+        'Read one character at a time'
         
     
     def hasMoreTokens(self):
         'True if there is more tokens to process'
-        
+        'Ignore white-space and if there is a charecter return True'
     
     def advance(self):
         '''Get the next token from the input and
