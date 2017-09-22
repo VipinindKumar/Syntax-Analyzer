@@ -7,7 +7,8 @@ class JackTokenizer:
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
         'Read one character at a time'
-        inFile = self.__openFile(inFile)
+        self.c = ''
+        self.inFile = self.__openFile(inFile)
     
     def __openFile(self, file):
         'Create a generator by opening the file'
@@ -19,6 +20,19 @@ class JackTokenizer:
     def hasMoreTokens(self):
         'True if there is more tokens to process'
         'Ignore white-space and if there is a charecter return True'
+        while True:
+            try:
+                self.c = next(self.inFile)
+            except:
+                break
+            
+            'Ignore whitespace'
+            if self.c.isspace():
+                continue
+            else:
+                return True
+        
+        return False
     
     def advance(self):
         '''Get the next token from the input and
