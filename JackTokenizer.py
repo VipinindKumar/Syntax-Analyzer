@@ -39,6 +39,14 @@ class JackTokenizer:
         make it the current token. Called when
         hasMoreTokens return True'''
         
+        '''Need to use the current character, self.c and 
+        if self.c is an Jack Identifier, int or string, create a complete token
+        by iterating over more cahracters until a jack symbol defined in jack
+        grammer is hit or space character.
+        If self.c is a jack Symbol, return it.
+        If self.c is a keyword build it and then return it.'''
+        
+        
     
     def tokenType(self):
         '''Return the current token type;
