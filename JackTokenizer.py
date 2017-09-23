@@ -3,6 +3,14 @@ class JackTokenizer:
     file(s)? into a stream of tokens, ignoring
     whitespace, comments etc.'''
     
+    symbols = ['{', '}', '(', ')', '[', ']', '.',
+    ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']
+    
+    keywords = ['class', 'constructor', 'function', 'method', 'field', 
+    'static', 'var', 'int', 'char', 'boolean', 'void', 'true', 'false', 
+    'null', 'this', 'let', 'do', 'while', 'if', 'else', 'return']
+    
+    
     def __init__(self, inFile):
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
@@ -40,11 +48,11 @@ class JackTokenizer:
         hasMoreTokens return True'''
         
         '''Need to use the current character, self.c and 
-        if self.c is an Jack Identifier, int or string, create a complete token
+        -if self.c is an Jack Identifier, int or string, create a complete token
         by iterating over more cahracters until a jack symbol defined in jack
         grammer is hit or space character.
-        If self.c is a jack Symbol, return it.
-        If self.c is a keyword build it and then return it.'''
+        -If self.c is a jack Symbol, return it.
+        -If self.c is a keyword build it and then return it.'''
         
         
     
