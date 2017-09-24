@@ -16,6 +16,7 @@ class JackTokenizer:
         inFile and get ready to tokenize it'''
         'Read one character at a time'
         self.c = ''
+        self.token = ''
         self.inFile = self.__openFile(inFile)
     
     def __openFile(self, file):
@@ -29,16 +30,18 @@ class JackTokenizer:
         'True if there is more tokens to process'
         'Ignore white-space and if there is a charecter return True'
         while True:
-            try:
-                self.c = next(self.inFile)
-            except:
-                break
             
             'Ignore whitespace'
             if self.c.isspace():
                 continue
             else:
                 return True
+            
+            'Read next character'
+            try:
+                self.c = next(self.inFile)
+            except:
+                break
         
         return False
     
@@ -54,6 +57,16 @@ class JackTokenizer:
         -If self.c is a jack Symbol, return it.
         -If self.c is a keyword build it and then return it.'''
         
+        'If the c value is in symbols'
+        if self.c in JackTokenizer.symbols:
+            self.token = self.c
+            self.c = next(self.inFile)
+        
+        else:
+            'Keep building the token until a separator(a symbol or space/s) is read'
+            while self.c != ' ' and self.c not in JackTokenizer.symbols:
+                self.token += self.c
+                self.c = next(self.inFile)
         
     
     def tokenType(self):
