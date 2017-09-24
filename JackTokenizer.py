@@ -26,7 +26,7 @@ class JackTokenizer:
             for line in jackFile:
                 for character in line:
                     yield character
-    
+    # !!! add support for ignoring comments
     def hasMoreTokens(self):
         #True if there is more tokens to process
         #Ignore white-space and if there is a charecter return True
