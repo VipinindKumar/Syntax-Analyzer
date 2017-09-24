@@ -102,22 +102,37 @@ class JackTokenizer:
     def Keyword(self):
         '''Returns the current token if 
         tokenType is KEYWORD'''
-        
+        if self.tType != 'KEYWORD':
+            raise ValueError('not a keyword')
+        else:
+            return self.token
     
     def symbol(self):
         #Returns the character which is the current token
-        
+        if self.tType != 'SYMBOL':
+            raise ValueError('not a symbol')
+        else:
+            return self.token
     
     def identifier(self):
         #Returns the identifier which is the current token
-        
+        if self.tType != 'IDENTIFIER':
+            raise ValueError('not a identifier')
+        else:
+            return self.token
     
     def intVal(self):
         #Returns the integer value of the current token
-        
+        if self.tType != 'INT_CONST':
+            raise ValueError('not a int const')
+        else:
+            return self.token
     
     def stringVal(self):
         '''Returns the String value of the current token
         without the double quotes'''
-        
+        if self.tType != 'STRING_CONST':
+            raise ValueError('not a string const')
+        else:
+            return self.token[1:-1]
     
