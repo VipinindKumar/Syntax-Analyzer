@@ -14,30 +14,31 @@ class JackTokenizer:
     def __init__(self, inFile):
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
-        'Read one character at a time'
+        #Read one character at a time
         self.c = ''
         self.token = ''
+        self.tType = ''
         self.inFile = self.__openFile(inFile)
     
     def __openFile(self, file):
-        'Create a generator by opening the file'
+        #Create a generator by opening the file
         with open(file) as jackFile:
             for line in jackFile:
                 for character in line:
                     yield character
     
     def hasMoreTokens(self):
-        'True if there is more tokens to process'
-        'Ignore white-space and if there is a charecter return True'
+        #True if there is more tokens to process
+        #Ignore white-space and if there is a charecter return True
         while True:
             
-            'Ignore whitespace'
+            #Ignore whitespace
             if self.c.isspace():
                 continue
             else:
                 return True
             
-            'Read next character'
+            #Read next character
             try:
                 self.c = next(self.inFile)
             except:
@@ -57,23 +58,46 @@ class JackTokenizer:
         -If self.c is a jack Symbol, return it.
         -If self.c is a keyword build it and then return it.'''
         
-        'If the c value is in symbols'
+        #If the c value is in symbols
         if self.c in JackTokenizer.symbols:
             self.token = self.c
             self.c = next(self.inFile)
         
         else:
-            'Keep building the token until a separator(a symbol or space/s) is read'
+            #Keep building the token until a separator(a symbol or space/s) is read
             while self.c != ' ' and self.c not in JackTokenizer.symbols:
                 self.token += self.c
                 self.c = next(self.inFile)
-        
     
     def tokenType(self):
         '''Return the current token type;
         KEYWORD | SYMBOL | IDENTIFIER | 
         INT_CONST | STRING_CONST'''
         
+        #SYMBOL
+        if self.token in JackTokenizer.symbols:
+            self.tType = 'SYMBOL'
+            return self.tType
+        
+        #KEYWORD
+        elif self.token in JackTokenizer.keywords:
+            self.tType = 'KEYWORD'
+            return self.tType
+            
+        #STRING_CONST
+        elif self.token[0] == "\"" and self.token[-1] == "\"":
+            self.tType = 'STRING_CONST'
+            return self.tType
+        
+        #INT_CONST
+        elif self.token.isdigit():
+            self.tType = 'INT_CONST'
+            return self.tType
+        
+        #IDENTIFIER
+        else:
+            self.tType = 'IDENTIFIER'
+            return self.tType
     
     def Keyword(self):
         '''Returns the current token if 
@@ -81,15 +105,15 @@ class JackTokenizer:
         
     
     def symbol(self):
-        'Returns the character which is the current token'
+        #Returns the character which is the current token
         
     
     def identifier(self):
-        'Returns the identifier which is the current token'
+        #Returns the identifier which is the current token
         
     
     def intVal(self):
-        'Returns the integer value of the current token'
+        #Returns the integer value of the current token
         
     
     def stringVal(self):
