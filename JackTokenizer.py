@@ -99,7 +99,7 @@ class JackTokenizer:
             self.tType = 'IDENTIFIER'
             return self.tType
     
-    def Keyword(self):
+    def keyword(self):
         '''Returns the current token if 
         tokenType is KEYWORD'''
         if self.tType != 'KEYWORD':
