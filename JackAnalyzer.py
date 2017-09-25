@@ -32,3 +32,8 @@ class JackAnalyzer:
                 
             outfile.write('\n<\Token>')
         outfile.close()
+        
+        
+#!!! change tabs in the output file, so there is no need to add two \n
+#!!! Change <, >, &, " to their respective character reference - &lt;, &gt;, &amp;, &quot;
+#!!! Handle comments in jack file
