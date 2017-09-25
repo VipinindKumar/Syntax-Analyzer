@@ -8,7 +8,7 @@ class JackAnalyzer:
     if __name__ == '__main__':
         tokenizer = JackTokenizer.JackTokenizer(sys.argv[0])
         with open(sys.argv[0][0:-4] + 'xml', 'w') as outfile:
-            outfile.write('<Token>\n\n    ')
+            outfile.write('<Token>\n')
             
             while tokenizer.hasMoreTokens():
                 tokenizer.advance()
@@ -16,24 +16,23 @@ class JackAnalyzer:
                 ttype = tokenizer.tokenType()
                 
                 if ttype == 'KEYWORD':
-                    outfile.write('<keyword>' + tokenizer.keyword() + '<\keyword>\n    ')
+                    outfile.write('    <keyword> ' + tokenizer.keyword() + ' <\keyword>\n')
                 
                 elif ttype == 'SYMBOL':
-                    outfile.write('<symbol>' + tokenizer.symbol() + '<\symbol>\n    ')
+                    outfile.write('    <symbol> ' + tokenizer.symbol() + ' <\symbol>\n')
                 
                 elif ttype == 'IDENTIFIER':
-                    outfile.write('<identifier>' + tokenizer.identifier() + '<\identifier>\n    ')
+                    outfile.write('    <identifier> ' + tokenizer.identifier() + ' <\identifier>\n')
                 
                 elif ttype == 'INT_CONST':
-                    outfile.write('<intVal>' + tokenizer.intVal() + '<\intval>\n    ')
+                    outfile.write('    <intConstant> ' + tokenizer.intVal() + ' <\intConstant>\n')
                 
                 elif ttype == 'STRING_CONST':
-                    outfile.write('<stringVal>' + tokenizer.stringVal() + '<\stringVal>\n    ')
+                    outfile.write('    <stringConstant> ' + tokenizer.stringVal() + ' <\stringConstant>\n')
                 
-            outfile.write('\n<\Token>')
+            outfile.write('<\Token>')
         outfile.close()
         
-        
-#!!! change tabs in the output file, so there is no need to add two \n
+
 #!!! Change <, >, &, " to their respective character reference - &lt;, &gt;, &amp;, &quot;
 #!!! Handle comments in jack file
