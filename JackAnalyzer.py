@@ -51,3 +51,4 @@ if __name__ == '__main__':
         
 
 #!!! Handle comments in jack file
+#!!! change the reading of file from one character at a time to reading a line at a time
