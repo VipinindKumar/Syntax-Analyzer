@@ -14,38 +14,72 @@ class JackTokenizer:
     def __init__(self, inFile):
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
-        # Read one character at a time
-        self.c = ''
+        
+        # Read one line at a time
+        self.inFile = self.__openFile(inFile)
+        
+        self.line = next(self.infile)
         self.token = ''
         self.tType = ''
-        self.inFile = self.__openFile(inFile)
+        self.i = 0
     
     def __openFile(self, file):
+        incomment = False
         # Create a generator by opening the file
         with open(file) as jackFile:
             for line in jackFile:
-                for character in line:
-                    yield character
+                
+                # Ignore Comments and empty lines
+                # Check empty lines
+                if not line:
+                    continue
+                
+                # Check for Multi line comments
+                elif line.startswith('/*') or incomment:
+                    # Read next line till multi line comments ends
+                    if '*/' not in line:
+                        incomment = True
+                        continue
+                    else:
+                        incomment = False
+                        continue
+                    
+                # Check for end of line comments, which are on complete line
+                elif line.startswith('//'):
+                    continue
+                
+                yield line
     
     # !!! add support for ignoring comments
     def hasMoreTokens(self):
         # True if there is more tokens to process
-        # Ignore white-space and if there is a charecter return True
         while True:
-            
-            # Ignore whitespace
-            if self.c.isspace():
-                continue
+            # Ignore Comments and empty lines
+            if not self.line:
+                pass
+            elif self.line.startswith('//'):
+                pass
+            elif self.line.startswith('/*'):
+                # Read next line till multi line comments ends
+                while True:
+                    try:
+                        self.line = next(self.inFile)
+                    except:
+                        return False
+                    
+                    if '*/' in self.line:
+                        break
             else:
-                return True
-            
-            # Read next character
-            try:
-                self.c = next(self.inFile)
-            except:
                 break
-        
-        return False
+            
+            # Read next line
+            try:
+                self.line = next(self.inFile)
+                break
+            except:
+                return False
+            
+        return True
     
     def advance(self):
         ''' Get the next token from the input and
