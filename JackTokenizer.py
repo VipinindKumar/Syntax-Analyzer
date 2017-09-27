@@ -18,7 +18,11 @@ class JackTokenizer:
         # Read one character at a time, ignoring comments and empty lines
         self.inFile = self.__openFile(inFile)
         
-        self.line = next(self.infile)
+        try:
+            self.line = next(self.inFile)
+        except:
+            raise Exception('Empty input file')
+        
         self.token = ''
         self.tType = ''
         self.i = 0
