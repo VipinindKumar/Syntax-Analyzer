@@ -20,8 +20,8 @@ def charRef(sym):
     
     
 if __name__ == '__main__':
-    tokenizer = JackTokenizer.JackTokenizer(sys.argv[0])
-    with open(sys.argv[0][0:-4] + 'xml', 'w') as outfile:
+    tokenizer = JackTokenizer.JackTokenizer(sys.argv[1])
+    with open(sys.argv[1][0:-4] + 'xml', 'w') as outfile:
         outfile.write('<Token>\n')
         
         while tokenizer.hasMoreTokens():

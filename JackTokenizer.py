@@ -85,6 +85,9 @@ class JackTokenizer:
         -If self.c is a jack Symbol, return it.
         -If self.c is a keyword build it and then return it.'''
         
+        # Set self.token to an empty string
+        self.token = ''
+        
         # If it's a comment
         if self.c == '/':
             temp = self.c
