@@ -128,6 +128,24 @@ class JackTokenizer:
         else:
             # Keep building the token until a separator(a symbol or space/s) is read
             while self.c != ' ' and self.c not in JackTokenizer.symbols:
+                
+                # Add separate code for strings
+                if self.c == '\"':
+                    try:
+                        self.c = next(self.inFile)
+                    except:
+                        raise Exception('Syntax Error')
+                        
+                    # Read the whole stirng, without recording the quotes in the token
+                    while self.c != '\"':
+                        self.token += self.c
+                        try:
+                            self.c = next(self.inFile)
+                        except:
+                            raise Exception('Syntax Error')
+                    
+                    break
+                
                 self.token += self.c
                 try:
                     self.c = next(self.inFile)
@@ -200,5 +218,5 @@ class JackTokenizer:
         if self.tType != 'STRING_CONST':
             raise ValueError('not a string const')
         else:
-            return self.token[1:-1]
+            return self.token
     
