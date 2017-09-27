@@ -60,8 +60,6 @@ class JackTokenizer:
         while True:
             if not self.c:
                 return False
-            elif self.c == '/':
-                
             elif self.c.isspace():
                 pass
             else:
