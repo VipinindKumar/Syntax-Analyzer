@@ -58,7 +58,11 @@ class JackTokenizer:
     def hasMoreTokens(self):
         # True if there is more tokens to process
         while True:
-            if self.c.isspace():
+            if not self.c:
+                return False
+            elif self.c == '/':
+                
+            elif self.c.isspace():
                 pass
             else:
                 break
@@ -85,34 +89,50 @@ class JackTokenizer:
         
         # If it's a comment
         if self.c == '/':
-            self.token = self.c
+            temp = self.c
             
-            #!!! Handle EOF later
-            #!!! and use try and except
-            
-            # Check the next character
+            # **Important** Do not end the file with a in-line one-liner comment
+            # Check the next character (Expecting the file to not end with a '/')
             self.c = next(self.inFile)
             # If // type of comment
             if self.c =='/':
                 while self.c != '\n':
+                    try:
+                        self.c = next(self.inFile)
+                    except:
+                        break
+                
+                try:
                     self.c = next(self.inFile)
-                
+                except:
+                    self.c = ''
                 self.advance()
-            
-            # If /* */ type of comment
-            elif self.c == '*':
                 
+            else:
+                self.token = temp
+                try:
+                    self.c = next(self.inFile)
+                except:
+                    self.c = ''
+            
             
         # If the c value is in symbols
         elif self.c in JackTokenizer.symbols:
             self.token = self.c
-            self.c = next(self.inFile)
-        
+            try:
+                self.c = next(self.inFile)
+            except:
+                self.c = ''
+    
         else:
             # Keep building the token until a separator(a symbol or space/s) is read
             while self.c != ' ' and self.c not in JackTokenizer.symbols:
                 self.token += self.c
-                self.c = next(self.inFile)
+                try:
+                    self.c = next(self.inFile)
+                except:
+                    self.c = ''
+                    break
     
     def tokenType(self):
         ''' Return the current token type;
