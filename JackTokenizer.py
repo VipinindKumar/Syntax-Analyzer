@@ -19,7 +19,7 @@ class JackTokenizer:
         self.inFile = self.__openFile(inFile)
         
         try:
-            self.line = next(self.inFile)
+            self.c = next(self.inFile)
         except:
             raise Exception('Empty input file')
         
@@ -58,28 +58,14 @@ class JackTokenizer:
     def hasMoreTokens(self):
         # True if there is more tokens to process
         while True:
-            # Ignore Comments and empty lines
-            if not self.line:
+            if self.c.isspace():
                 pass
-            elif self.line.startswith('//'):
-                pass
-            elif self.line.startswith('/*'):
-                # Read next line till multi line comments ends
-                while True:
-                    try:
-                        self.line = next(self.inFile)
-                    except:
-                        return False
-                    
-                    if '*/' in self.line:
-                        break
             else:
                 break
             
-            # Read next line
+            # Read next character
             try:
-                self.line = next(self.inFile)
-                break
+                self.c = next(self.inFile)
             except:
                 return False
             
