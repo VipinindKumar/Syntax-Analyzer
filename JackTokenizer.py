@@ -15,7 +15,7 @@ class JackTokenizer:
         '''constructor for JackTokenizer open the
         inFile and get ready to tokenize it'''
         
-        # Read one line at a time
+        # Read one character at a time, ignoring comments and empty lines
         self.inFile = self.__openFile(inFile)
         
         self.line = next(self.infile)
@@ -48,9 +48,9 @@ class JackTokenizer:
                 elif line.startswith('//'):
                     continue
                 
-                yield line
+                for character in line:
+                    yield character
     
-    # !!! add support for ignoring comments
     def hasMoreTokens(self):
         # True if there is more tokens to process
         while True:
