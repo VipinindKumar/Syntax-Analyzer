@@ -111,7 +111,6 @@ class JackTokenizer:
                 except:
                     self.c = ''
                 
-                self.hasMoreTokens()  # will solve the problem of having tabs or spaces in tokens
                 self.advance()  # need to advance after a comment
             
             else:
