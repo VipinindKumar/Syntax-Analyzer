@@ -25,7 +25,6 @@ class JackTokenizer:
         
         self.token = ''
         self.tType = ''
-        self.i = 0
     
     def __openFile(self, file):
         incomment = False
