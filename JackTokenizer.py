@@ -124,28 +124,25 @@ class JackTokenizer:
                 self.c = next(self.inFile)
             except:
                 self.c = ''
-    
+        
+        # Add separate code for strings
+        elif self.c == '\"':
+            try:
+                self.c = next(self.inFile)
+            except:
+                raise Exception('Syntax Error')
+                
+            # Read the whole stirng, without recording the quotes in the token
+            while self.c != '\"':
+                self.token += self.c
+                try:
+                    self.c = next(self.inFile)
+                except:
+                    raise Exception('Syntax Error')
+        
         else:
             # Keep building the token until a separator(a symbol or space/s) is read
             while self.c != ' ' and self.c not in JackTokenizer.symbols:
-                
-                # Add separate code for strings
-                if self.c == '\"':
-                    try:
-                        self.c = next(self.inFile)
-                    except:
-                        raise Exception('Syntax Error')
-                        
-                    # Read the whole stirng, without recording the quotes in the token
-                    while self.c != '\"':
-                        self.token += self.c
-                        try:
-                            self.c = next(self.inFile)
-                        except:
-                            raise Exception('Syntax Error')
-                    
-                    break
-                
                 self.token += self.c
                 try:
                     self.c = next(self.inFile)
