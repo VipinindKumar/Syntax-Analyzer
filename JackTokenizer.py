@@ -13,15 +13,15 @@ class JackTokenizer:
     def __init__(self, inFile):
         """constructor for JackTokenizer open the
             inFile and get ready to tokenize it"""
-
+        
         # Read one character at a time, ignoring comments and empty lines
         self.inFile = self.__openFile(inFile)
-
+        
         try:
             self.c = next(self.inFile)
         except:
             raise Exception('Empty input file')
-
+        
         self.token = ''
         self.tType = ''
 
@@ -67,13 +67,13 @@ class JackTokenizer:
                 pass
             else:
                 break
-
+            
             # Read next character
             try:
                 self.c = next(self.inFile)
             except:
                 return False
-
+        
         return True
 
     def advance(self):
@@ -94,7 +94,7 @@ class JackTokenizer:
         # If it's a comment
         if self.c == '/':
             temp = self.c
-        
+            
             # Check the next character (Expecting the file to not end with a '/')
             self.c = next(self.inFile)
             # If // type of comment
