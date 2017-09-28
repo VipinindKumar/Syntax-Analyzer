@@ -228,5 +228,5 @@ class JackTokenizer:
         if self.tType != 'STRING_CONST':
             raise ValueError('not a string const')
         else:
-            return self.token
+            return self.token[1:-1]
     
