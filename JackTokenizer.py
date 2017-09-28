@@ -35,7 +35,7 @@ class JackTokenizer:
                 
                 # Ignore Comments and empty lines
                 # Check empty lines
-                if not line:
+                if not line or line == '\n':
                     continue
                 
                 # Check for Multi line comments
