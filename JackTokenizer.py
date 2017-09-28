@@ -30,12 +30,14 @@ class JackTokenizer:
         # Create a generator by opening the file
         with open(file) as jackFile:
             for line in jackFile:
-
+                
+                line = line.lstrip() # solves many problems arising from tabs and spaces at start
+                
                 # Ignore Comments and empty lines
                 # Check empty lines
                 if not line or line == '\n':
                     continue
-
+                
                 # Check for Multi line comments
                 elif line.startswith('/*') or incomment:
                     # Read next line till multi line comments ends
@@ -45,11 +47,11 @@ class JackTokenizer:
                     else:
                         incomment = False
                         continue
-
+                
                 # Check for end of line comments, which are on complete line
                 elif line.startswith('//'):
                     continue
-
+                
                 for character in line:
                     yield character
 
@@ -78,21 +80,21 @@ class JackTokenizer:
         """ Get the next token from the input and
             make it the current token. Called when
             hasMoreTokens return True"""
-
+        
         ''' Need to use the current character, self.c and 
             -if self.c is an Jack Identifier, int or string, create a complete token
             by iterating over more cahracters until a jack symbol defined in jack
             grammer is hit or space character.
             -If self.c is a jack Symbol, return it.
             -If self.c is a keyword build it and then return it.'''
-
+        
         # Set self.token to an empty string
         self.token = ''
-
+        
         # If it's a comment
         if self.c == '/':
             temp = self.c
-
+        
             # Check the next character (Expecting the file to not end with a '/')
             self.c = next(self.inFile)
             # If // type of comment
@@ -102,16 +104,16 @@ class JackTokenizer:
                         self.c = next(self.inFile)
                     except:
                         break
-
+                
                 # Read the next character for next hasMoreTokens() call
                 try:
                     self.c = next(self.inFile)
                 except:
                     self.c = ''
-
+                
                 self.hasMoreTokens()  # will solve the problem of having tabs or spaces in tokens
                 self.advance()  # need to advance after a comment
-
+            
             else:
                 self.token = temp
                 # Read the next character for next hasMoreTokens() call
@@ -119,8 +121,8 @@ class JackTokenizer:
                     self.c = next(self.inFile)
                 except:
                     self.c = ''
-
-
+        
+        
         # If the c value is in symbols
         elif self.c in JackTokenizer.symbols:
             self.token = self.c
@@ -134,12 +136,12 @@ class JackTokenizer:
         elif self.c == '\"':
             # Saving string as "This is a String", including quotes
             self.token = self.c
-
+            
             try:
                 self.c = next(self.inFile)
             except:
                 raise Exception('Syntax Error')
-
+            
             # Read the whole stirng, without recording the quotes in the token
             while self.c != '\"':
                 self.token += self.c
@@ -147,7 +149,7 @@ class JackTokenizer:
                     self.c = next(self.inFile)
                 except:
                     raise Exception('Syntax Error')
-
+            
             # Add the double quote at the end of the string
             self.token += self.c
             # Read the next character for next hasMoreTokens() call
@@ -155,7 +157,7 @@ class JackTokenizer:
                 self.c = next(self.inFile)
             except:
                 self.c = ''
-
+        
         else:
             # Keep building the token until a separator(a symbol or space/s) is read
             while self.c != ' ' and self.c not in JackTokenizer.symbols:
@@ -170,27 +172,27 @@ class JackTokenizer:
         """ Return the current token type;
             KEYWORD | SYMBOL | IDENTIFIER |
             INT_CONST | STRING_CONST"""
-
+        
         # SYMBOL
         if self.token in JackTokenizer.symbols:
             self.tType = 'SYMBOL'
             return self.tType
-
+        
         # KEYWORD
         elif self.token in JackTokenizer.keywords:
             self.tType = 'KEYWORD'
             return self.tType
-
+        
         # STRING_CONST
         elif self.token[0] == "\"" and self.token[-1] == "\"":
             self.tType = 'STRING_CONST'
             return self.tType
-
+        
         # INT_CONST
         elif self.token.isdigit():
             self.tType = 'INT_CONST'
             return self.tType
-
+        
         # IDENTIFIER
         else:
             self.tType = 'IDENTIFIER'
