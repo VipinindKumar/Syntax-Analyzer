@@ -1,8 +1,8 @@
 import JackTokenizer
 import sys
 
-'''Main class to run the JackAnalyzer
-by using JackTokenizer and CompilationEngine'''
+"""Main file to run the JackAnalyzer
+    by using JackTokenizer and CompilationEngine"""
 
 
 #Change <, >, &, " to their respective character reference - &lt;, &gt;, &amp;, &quot;
