@@ -102,6 +102,7 @@ class JackTokenizer:
                     except:
                         break
                 
+                # Read the next character for next hasMoreTokens() call
                 try:
                     self.c = next(self.inFile)
                 except:
@@ -110,6 +111,7 @@ class JackTokenizer:
                 
             else:
                 self.token = temp
+                # Read the next character for next hasMoreTokens() call
                 try:
                     self.c = next(self.inFile)
                 except:
@@ -119,6 +121,7 @@ class JackTokenizer:
         # If the c value is in symbols
         elif self.c in JackTokenizer.symbols:
             self.token = self.c
+            # Read the next character for next hasMoreTokens() call
             try:
                 self.c = next(self.inFile)
             except:
@@ -126,6 +129,9 @@ class JackTokenizer:
         
         # Add separate code for strings
         elif self.c == '\"':
+            # Saving string as "This is a String", including quotes
+            self.token = self.c
+            
             try:
                 self.c = next(self.inFile)
             except:
@@ -138,6 +144,14 @@ class JackTokenizer:
                     self.c = next(self.inFile)
                 except:
                     raise Exception('Syntax Error')
+            
+            # Add the double quote at the end of the string
+            self.token += self.c
+            # Read the next character for next hasMoreTokens() call
+            try:
+                self.c = next(self.inFile)
+            except:
+                self.c = ''
         
         else:
             # Keep building the token until a separator(a symbol or space/s) is read
