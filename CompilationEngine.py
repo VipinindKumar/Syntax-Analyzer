@@ -1,17 +1,25 @@
 class CompilationEngine:
-    '''Gets its input from JackTokenizer and 
-        emits it parsed structure in output stream/file'''
+    """ Gets its input from JackTokenizer and 
+        emits it parsed structure in output stream/file"""
     
     def __init__(self, inFile, outFile):
-        '''Creates a new CompilationEngine with given
+        """ Creates a new CompilationEngine with given
             input and output. The next routine called must
-            be compileClass()'''
+            be compileClass()"""
         
+        # Create an object of JackTokenizer with the input file
+        self.tokenizer = JackTokenizer(inFile)
         
+        # Open a output file to write to
+        self.out = open(outFile, 'w')
+        
+
     
     def compileClass(self):
         'Compiles a complete class'
         
+        # Writes <class> in output
+        # check that there is class keyword as next token and output the fact
     
     def compileClassVarDec(self):
         'Compiles a static or a field declaration'
