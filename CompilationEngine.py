@@ -13,7 +13,56 @@ class CompilationEngine:
         # Open a output file to write to
         self.out = open(outFile, 'w')
         
-
+        self.currentToken = ''
+        self.currentTokenType = ''
+        
+    
+    #Change <, >, &, " to their respective character reference - &lt;, &gt;, &amp;, &quot;
+    def __charRef(sym):
+        if sym == '<':
+            return '&lt;'
+        elif sym == '>':
+            return '&gt;'
+        elif sym == '&':
+            return '&amp;'
+        elif sym == '"':
+            return '&quot;'
+        else:
+            return sym
+    
+    def __advance(self):
+        """ """
+        
+        if not tokenizer.hasMoreTokens():
+            # error
+            
+        else:
+            tokenizer.advance()
+            self.currentTokenType = tokenizer.tokenType()
+            
+            if self.currentTokenType == 'KEYWORD':
+                self.currentToken = tokenizer.keyword()
+            
+            elif self.currentTokenType == 'SYMBOL':
+                self.currentToken = self.__charRef(tokenizer.symbol())
+            
+            elif self.currentTokenType == 'IDENTIFIER':
+                self.currentToken = tokenizer.identifier()
+            
+            elif self.currentTokenType == 'INT_CONST':
+                self.currentToken = tokenizer.intVal()
+            
+            elif self.currentTokenType == 'STRING_CONST':
+                self.currentToken = tokenizer.stringVal()
+    
+    def __eat(self, string):
+        """ """
+        
+        if self.currentToken != string:
+            raise Exception('Expected ' + string + 'but found ' + self.currentToken)
+        else:
+            # advance the tokenizer
+            self.__advance()
     
     def compileClass(self):
         'Compiles a complete class'
