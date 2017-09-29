@@ -1,11 +1,11 @@
 class CompilationEngine:
     """ Gets its input from JackTokenizer and 
-        emits it parsed structure in output stream/file"""
+        emits it parsed structure in output stream/file """
     
     def __init__(self, inFile, outFile):
         """ Creates a new CompilationEngine with given
             input and output. The next routine called must
-            be compileClass()"""
+            be compileClass() """
         
         # Create an object of JackTokenizer with the input file
         self.tokenizer = JackTokenizer(inFile)
@@ -17,8 +17,10 @@ class CompilationEngine:
         self.currentTokenType = ''
         
     
-    #Change <, >, &, " to their respective character reference - &lt;, &gt;, &amp;, &quot;
     def __charRef(sym):
+        """ Change <, >, &, " to their respective
+            character reference - &lt;, &gt;, &amp;, &quot; """
+        
         if sym == '<':
             return '&lt;'
         elif sym == '>':
@@ -31,11 +33,12 @@ class CompilationEngine:
             return sym
     
     def __advance(self):
-        """ """
+        """ Advance the tokenizer and store the 
+            token and it's respective type """
         
         if not tokenizer.hasMoreTokens():
             # error
-            
+            raise Exception('Unexpected end of file')
         else:
             tokenizer.advance()
             self.currentTokenType = tokenizer.tokenType()
@@ -44,7 +47,7 @@ class CompilationEngine:
                 self.currentToken = tokenizer.keyword()
             
             elif self.currentTokenType == 'SYMBOL':
-                self.currentToken = self.__charRef(tokenizer.symbol())
+                self.currentToken = tokenizer.symbol()
             
             elif self.currentTokenType == 'IDENTIFIER':
                 self.currentToken = tokenizer.identifier()
@@ -56,7 +59,9 @@ class CompilationEngine:
                 self.currentToken = tokenizer.stringVal()
     
     def __eat(self, string):
-        """ """
+        """ Make sure the string equals the currentToken value
+            and if it does it advances the tokenizer
+            else an exception is thrown"""
         
         if self.currentToken != string:
             raise Exception('Expected ' + string + 'but found ' + self.currentToken)
