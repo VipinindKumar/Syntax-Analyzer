@@ -1,11 +1,12 @@
 class CompilationEngine:
     '''Gets its input from JackTokenizer and 
-    emits it parsed structure in output stream/file'''
+        emits it parsed structure in output stream/file'''
     
     def __init__(self, inFile, outFile):
         '''Creates a new CompilationEngine with given
-        input and output. The next routine called must
-        be compileClass()'''
+            input and output. The next routine called must
+            be compileClass()'''
+        
         
     
     def compileClass(self):
