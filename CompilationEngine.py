@@ -66,6 +66,8 @@ class CompilationEngine:
         if self.currentToken != string:
             raise Exception('Expected ' + string + 'but found ' + self.currentToken)
         else:
+            out.write('<' + self.currentTokenType + '> ' + string + ' <' + self.currentTokenType + '>')
+            
             # advance the tokenizer
             self.__advance()
     
@@ -73,7 +75,13 @@ class CompilationEngine:
         'Compiles a complete class'
         
         # Writes <class> in output
+        out.write('<class>\n')
+        
         # check that there is class keyword as next token and output the fact
+        self.__eat('class')
+        
+        
+        
     
     def compileClassVarDec(self):
         'Compiles a static or a field declaration'
