@@ -1,3 +1,5 @@
+import JackTokenizer
+
 class CompilationEngine:
     """ Gets its input from JackTokenizer and 
         emits it parsed structure in output stream/file """
@@ -8,7 +10,7 @@ class CompilationEngine:
             be compileClass() """
         
         # Create an object of JackTokenizer with the input file
-        self.tokenizer = JackTokenizer(inFile)
+        self.tokenizer = JackTokenizer.JackTokenizer(inFile)
         
         # Open a output file to write to
         self.out = open(outFile, 'w')
@@ -17,7 +19,7 @@ class CompilationEngine:
         self.currentTokenType = ''
         
     
-    def __charRef(sym):
+    def __charRef(self, sym):
         """ Change <, >, &, " to their respective
             character reference - &lt;, &gt;, &amp;, &quot; """
         
@@ -36,27 +38,27 @@ class CompilationEngine:
         """ Advance the tokenizer and store the 
             token and it's respective type """
         
-        if not tokenizer.hasMoreTokens():
+        if not self.tokenizer.hasMoreTokens():
             # error
             raise Exception('Unexpected end of file')
         else:
-            tokenizer.advance()
-            self.currentTokenType = tokenizer.tokenType()
+            self.tokenizer.advance()
+            self.currentTokenType = self.tokenizer.tokenType()
             
             if self.currentTokenType == 'KEYWORD':
-                self.currentToken = tokenizer.keyword()
+                self.currentToken = self.tokenizer.keyword()
             
             elif self.currentTokenType == 'SYMBOL':
-                self.currentToken = tokenizer.symbol()
+                self.currentToken = self.tokenizer.symbol()
             
             elif self.currentTokenType == 'IDENTIFIER':
-                self.currentToken = tokenizer.identifier()
+                self.currentToken = self.tokenizer.identifier()
             
             elif self.currentTokenType == 'INT_CONST':
-                self.currentToken = tokenizer.intVal()
+                self.currentToken = self.tokenizer.intVal()
             
             elif self.currentTokenType == 'STRING_CONST':
-                self.currentToken = tokenizer.stringVal()
+                self.currentToken = self.tokenizer.stringVal()
     
     def __eat(self, string):
         """ Make sure the string equals the currentToken value
@@ -66,7 +68,7 @@ class CompilationEngine:
         if self.currentToken != string:
             raise Exception('Expected ' + string + 'but found ' + self.currentToken)
         else:
-            out.write('<' + self.currentTokenType + '> ' + string + ' <' + self.currentTokenType + '>')
+            self.out.write('<' + self.currentTokenType + '> ' + string + ' <' + self.currentTokenType + '>')
             
             # advance the tokenizer
             self.__advance()
@@ -75,7 +77,7 @@ class CompilationEngine:
         'Compiles a complete class'
         
         # Writes <class> in output
-        out.write('<class>\n')
+        self.out.write('<class>\n')
         
         # check that there is class keyword as next token and output the fact
         self.__eat('class')
