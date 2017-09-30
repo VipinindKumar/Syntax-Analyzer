@@ -68,7 +68,7 @@ class CompilationEngine:
         if self.currentToken != string:
             raise Exception('Expected ' + string + 'but found ' + self.currentToken)
         else:
-            self.out.write('<' + self.currentTokenType + '> ' + string + ' <' + self.currentTokenType + '>')
+            self.out.write('<' + self.currentTokenType + '> ' + string + ' <' + self.currentTokenType + '>\n')
             
             # advance the tokenizer
             self.__advance()
