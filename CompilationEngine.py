@@ -88,6 +88,10 @@ class CompilationEngine:
         """ Compiles a complete class """
         
         self.out.write('<class>\n') # Start <class> tag in output
+        
+        # Add single Indentation to xml file tags from here
+        self.tabs += 1
+        
         self.__eat('class') # check that there is class keyword as next token and output the fact
         
         self.__printTag() # Handles className identifier
@@ -103,6 +107,9 @@ class CompilationEngine:
             self.compileSubroutine()
         
         self.__eat('}') # '}'
+        
+        # Remove single indentation from the tags
+        self.tabs -= 1
         
         self.out.write('</class>')
     
