@@ -17,6 +17,7 @@ class CompilationEngine:
         
         self.currentToken = ''
         self.currentTokenType = ''
+        self.tabs = 0
         
     
     def __charRef(self, sym):
@@ -63,7 +64,12 @@ class CompilationEngine:
     def __printTag(self):
         """ Print the currentToken as an appropriate tag in xml file
             using currentToken and currentTokenType """
-            
+        
+        # Print the appropriate numbers of tabs, before the tag
+        for i in range(self.tabs):
+            self.out.write('\t')
+        
+        # Print the tag and its value in the xml file
         self.out.write('<' + self.currentTokenType + '> ' + self.currentToken + ' <' + self.currentTokenType + '>\n')
         
         self.__advance() # advance the tokenizer
