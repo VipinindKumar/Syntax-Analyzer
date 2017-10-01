@@ -65,6 +65,8 @@ class CompilationEngine:
             using currentToken and currentTokenType """
             
         self.out.write('<' + self.currentTokenType + '> ' + self.currentToken + ' <' + self.currentTokenType + '>\n')
+        
+        self.__advance() # advance the tokenizer
     
     def __eat(self, string):
         """ Make sure the string equals the currentToken value
@@ -75,15 +77,12 @@ class CompilationEngine:
             raise Exception('Expected ' + string + 'but found ' + self.currentToken)
         else:
             self.__printTag()
-            
-            # advance the tokenizer
-            self.__advance()
     
     def compileClass(self):
         'Compiles a complete class'
         self.out.write('<class>\n') # Writes <class> in output
         self.__eat('class') # check that there is class keyword as next token and output the fact
-        
+        self.
         
         
     
