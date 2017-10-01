@@ -92,11 +92,11 @@ class CompilationEngine:
         # Add single Indentation to xml file tags from here
         self.tabs += 1
         
-        self.__eat('class') # check that there is class keyword as next token and output the fact
+        self.__eat(['class']) # check that there is class keyword as next token and output the fact
         
         self.__printTag() # Handles className identifier
         
-        self.__eat('{') # '{'
+        self.__eat(['{']) # '{'
         
         # 0 or more class variable declarations
         while self.currentToken not in ['constructor', 'method', 'function']:
@@ -106,7 +106,7 @@ class CompilationEngine:
         while self.currentToken != '}':
             self.compileSubroutine()
         
-        self.__eat('}') # '}'
+        self.__eat(['}']) # '}'
         
         # Remove single indentation from the tags
         self.tabs -= 1
