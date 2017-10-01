@@ -74,13 +74,13 @@ class CompilationEngine:
         
         self.__advance() # advance the tokenizer
     
-    def __eat(self, string):
+    def __eat(self, stringList):
         """ Make sure the string equals the currentToken value
             and if it does it advances the tokenizer
             else an exception is thrown"""
         
-        if self.currentToken != string:
-            raise Exception('Expected ' + string + 'but found ' + self.currentToken)
+        if self.currentToken in stringList:
+            raise Exception('Expected ' + self.currentToken + 'but found ' + self.currentToken)
         else:
             self.__printTag()
     
