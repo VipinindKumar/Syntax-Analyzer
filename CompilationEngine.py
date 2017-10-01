@@ -60,6 +60,12 @@ class CompilationEngine:
             elif self.currentTokenType == 'STRING_CONST':
                 self.currentToken = self.tokenizer.stringVal()
     
+    def __printTag(self):
+        """ Print the currentToken as an appropriate tag in xml file
+            using currentToken and currentTokenType """
+            
+        self.out.write('<' + self.currentTokenType + '> ' + self.currentToken + ' <' + self.currentTokenType + '>\n')
+    
     def __eat(self, string):
         """ Make sure the string equals the currentToken value
             and if it does it advances the tokenizer
@@ -68,19 +74,15 @@ class CompilationEngine:
         if self.currentToken != string:
             raise Exception('Expected ' + string + 'but found ' + self.currentToken)
         else:
-            self.out.write('<' + self.currentTokenType + '> ' + string + ' <' + self.currentTokenType + '>\n')
+            self.__printTag()
             
             # advance the tokenizer
             self.__advance()
     
     def compileClass(self):
         'Compiles a complete class'
-        
-        # Writes <class> in output
-        self.out.write('<class>\n')
-        
-        # check that there is class keyword as next token and output the fact
-        self.__eat('class')
+        self.out.write('<class>\n') # Writes <class> in output
+        self.__eat('class') # check that there is class keyword as next token and output the fact
         
         
         
