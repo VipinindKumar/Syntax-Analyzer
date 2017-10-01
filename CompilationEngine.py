@@ -148,8 +148,45 @@ class CompilationEngine:
     def compileSubroutine(self):
         """ Compiles a complete method, function or constructor """
         
+        self.out.write('<SubroutineDec>\n')
+        
+        self.tabs += 1 # increase indentation
+        
+        self.__eat(['constructor', 'function', 'method']) # constructor | function | method
+        
+        # void | type: int | char | boolean | className
+        # can just use self.__printTag()
+        try:
+            self.__eat(['void', 'int', 'char', 'boolean'])
+        except:
+            self.__printTag()
+        
+        self.__printTag() # subroutineName identifier
+        
+        self.__eat('(') # '('
+        
+        self.compileParameterList()
+        
+        self.__eat(')') # ')'
+        
+        # subroutineBody
+        self.__eat('{')
+        
+        # (varDec)*
+        while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
+            self.compileVarDec()
+        
+        # statements
+        self.compileStatements()
+        
+        self.__eat('}')
+        
+        # Remove single indentation from the tags
+        self.tabs -= 1
+        
+        self.out.write('</SubroutineDec>\n')
     
-    def CompileParameterList(self):
+    def compileParameterList(self):
         """ Compiles a parameter list(possibly empty) not including the enclosing () """
         
     
