@@ -82,9 +82,16 @@ class CompilationEngine:
         'Compiles a complete class'
         self.out.write('<class>\n') # Writes <class> in output
         self.__eat('class') # check that there is class keyword as next token and output the fact
-        self.
         
+        self.__printTag() # Handles className identifier
         
+        self.__eat('{') # '{'
+        
+        self.compileClassVarDec() # 0 or more class variable declarations
+        
+        self.compileSubroutine() # 0 or more subroutines
+        
+        self.__eat('}') # '}'
     
     def compileClassVarDec(self):
         'Compiles a static or a field declaration'
