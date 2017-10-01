@@ -84,6 +84,8 @@ class CompilationEngine:
         else:
             self.__printTag()
     
+    
+    
     def compileClass(self):
         """ Compiles a complete class """
         
@@ -116,7 +118,32 @@ class CompilationEngine:
     def compileClassVarDec(self):
         """ Compiles a static or a field declaration """
         
+        self.out.write('<ClassVarDec>\n')
         
+        self.tabs += 1 # increase indentation
+        
+        self.__eat(['static', 'field']) # (static | field)
+        
+        # type: int | char | boolean | className
+        # can just use self.__printTag()
+        try:
+            self.__eat(['int', 'char', 'boolean'])
+        except:
+            self.__printTag()
+        
+        self.__printTag() # varName identifier
+        
+        # (',' varName)*
+        while self.currentToken != ';':
+            self.__eat(',')
+            self.__printTag() # varName identifier
+        
+        self.__eat(';') # ';'
+        
+        # Remove single indentation from the tags
+        self.tabs -= 1
+        
+        self.out.write('</ClassVarDec>\n')
     
     def compileSubroutine(self):
         """ Compiles a complete method, function or constructor """
