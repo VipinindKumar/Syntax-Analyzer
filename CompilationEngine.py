@@ -79,7 +79,8 @@ class CompilationEngine:
             self.__printTag()
     
     def compileClass(self):
-        'Compiles a complete class'
+        """ Compiles a complete class """
+        
         self.out.write('<class>\n') # Writes <class> in output
         self.__eat('class') # check that there is class keyword as next token and output the fact
         
@@ -87,61 +88,66 @@ class CompilationEngine:
         
         self.__eat('{') # '{'
         
-        self.compileClassVarDec() # 0 or more class variable declarations
+        # 0 or more class variable declarations
+        while self.currentToken not in ['constructor', 'method', 'function']:
+            self.compileClassVarDec()
         
-        self.compileSubroutine() # 0 or more subroutines
+        # 0 or more subroutines
+        while self.currentToken != '}':
+            self.compileSubroutine()
         
         self.__eat('}') # '}'
     
     def compileClassVarDec(self):
-        'Compiles a static or a field declaration'
+        """ Compiles a static or a field declaration """
+        
         
     
     def compileSubroutine(self):
-        'Compiles a complete method, function or constructor'
+        """ Compiles a complete method, function or constructor """
         
     
     def CompileParameterList(self):
-        'Compiles a parameter list(possibly empty) not including the enclosing ()'
+        """ Compiles a parameter list(possibly empty) not including the enclosing () """
         
     
     def compileVarDec(self):
-        'compiles a variable declaration'
+        """ compiles a variable declaration """
         
     
     def compileStatements(self):
-        'Compiles series of statements, without {}'
+        """ Compiles series of statements, without {} """
         
     
     def compileDo(self):
-        'Compiles a do statement'
+        """ Compiles a do statement """
         
     
     def compileLet(self):
-        'Compiles a Let statement'
+        """ Compiles a Let statement """
         
     
     def compileWhile(self):
-        'Compiles a while statement'
+        """ Compiles a while statement """
         
     
     def compileReturn(self):
-        'Compiles a return statement'
+        """ Compiles a return statement """
         
     
     def compileIf(self):
-        'Compiles an If statement, possibly with a trailing else clause'
+        """ Compiles an If statement, possibly with a trailing else clause """
         
     
     def compileExpression(self):
-        'Compiles an expression'
+        """ Compiles an expression """
         
     
     def compileTerm(self):
-        'Compiles a Term'
+        """ Compiles a Term """
         
     
     def compileExpressionList(self):
-        'Compiles(possibly empty) comma separated list of expressions'
+        """ Compiles(possibly empty) comma separated list of expressions """
         
     
