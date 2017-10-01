@@ -81,7 +81,7 @@ class CompilationEngine:
     def compileClass(self):
         """ Compiles a complete class """
         
-        self.out.write('<class>\n') # Writes <class> in output
+        self.out.write('<class>\n') # Start <class> tag in output
         self.__eat('class') # check that there is class keyword as next token and output the fact
         
         self.__printTag() # Handles className identifier
@@ -97,6 +97,8 @@ class CompilationEngine:
             self.compileSubroutine()
         
         self.__eat('}') # '}'
+        
+        self.out.write('</class>')
     
     def compileClassVarDec(self):
         """ Compiles a static or a field declaration """
