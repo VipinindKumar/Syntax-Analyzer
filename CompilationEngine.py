@@ -112,7 +112,7 @@ class CompilationEngine:
     
     def compileClassVarDec(self):
         """ Compiles a static or a field declaration 
-            ClassVarDec: ('static' | 'field') type varName (',' varName)* ',' """
+            ClassVarDec: ('static' | 'field') type varName (',' varName)* ';' """
         
         self.out.write('<ClassVarDec>\n')
         
@@ -213,8 +213,33 @@ class CompilationEngine:
         self.out.write('</ParameterList>\n')
     
     def compileVarDec(self):
-        """ compiles a variable declaration """
+        """ compiles a variable declaration 
+            varDec: var type varName (',' varName)* ';' """
         
+        self.out.write('<VarDec>\n')
+        self.tabs += 1 # increase indentation
+        
+        self.__eat(['var']) # var
+        
+        # type: int | char | boolean | className
+        # can just use self.__printTag()
+        try:
+            self.__eat(['int', 'char', 'boolean'])
+        except:
+            self.__printTag()
+        
+        self.__printTag() # varName identifier
+        
+        # (',' varName)*
+        while self.currentToken != ';':
+            self.__eat(',')
+            self.__printTag() # varName identifier
+        
+        self.__eat(';') # ';'
+        
+        # Remove single indentation from the tags
+        self.tabs -= 1
+        self.out.write('</VarDec>\n')
     
     def compileStatements(self):
         """ Compiles series of statements, without {} """
