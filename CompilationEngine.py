@@ -253,6 +253,7 @@ class CompilationEngine:
             statement: letStatement | doStatement | ifStatement | 
                        whileStatement | returnStatement """
         
+        self.__printTabs()
         self.out.write('<Statements>\n')
         self.tabs += 1
         
@@ -271,6 +272,7 @@ class CompilationEngine:
                 break
         
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</Statements>\n')
     
     def __subroutineCall(self):
@@ -291,6 +293,7 @@ class CompilationEngine:
         """ Compiles a do statement 
             doStatment: 'do' subroutineCall ';' """
         
+        self.__printTabs()
         self.out.write('<DoStatement>\n')
         self.tabs += 1
         
@@ -302,12 +305,14 @@ class CompilationEngine:
         self.__eat(';') # ';'
         
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</DoStatement>\n')
     
     def compileLet(self):
         """ Compiles a Let statement 
         LetStatement: 'let' varName ('[' expression ']')? '=' expression ';' """
         
+        self.__printTabs()
         self.out.write('<LetStatement>\n')
         self.tabs += 1
         
@@ -326,12 +331,14 @@ class CompilationEngine:
         self.__eat(';')
         
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</LetStatement>\n')
     
     def compileWhile(self):
         """ Compiles a while statement 
             whileStatement: 'while' '(' expression ')' '{' statements '}' """
         
+        self.__printTabs()
         self.out.write('<WhileStatement>\n')
         self.tabs += 1
         
@@ -348,12 +355,14 @@ class CompilationEngine:
         self.__eat('}')
         
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</WhileStatement>\n')
     
     def compileReturn(self):
         """ Compiles a return statement
             ReturnStatement: 'return' (expression)? ';' """
         
+        self.__printTabs()
         self.out.write('<ReturnStatement>\n')
         self.tabs += 1
         
@@ -365,6 +374,7 @@ class CompilationEngine:
         self.__eat(';')
         
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</ReturnStatement>\n')
     
     def compileIf(self):
@@ -372,6 +382,7 @@ class CompilationEngine:
             IfStatements: 'if' '(' expression ')' '{' statements '}'
                           ('else' '{' statements '}')? """
         
+        self.__printTabs()
         self.out.write('<IfStatment>\n')
         self.tabs += 1
         
@@ -396,9 +407,8 @@ class CompilationEngine:
             self.__eat('}')
         
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</IfStatement>\n')
-    
-    # There could be a problem with no tabs in self.out.write commands
     
     def compileExpression(self):
         """ Compiles an expression """
