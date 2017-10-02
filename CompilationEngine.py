@@ -61,13 +61,16 @@ class CompilationEngine:
             elif self.currentTokenType == 'STRING_CONST':
                 self.currentToken = self.tokenizer.stringVal()
     
+    def __printTabs(self):
+        """ Print the appropriate numbers of tabs, before the tag """
+        for i in range(self.tabs):
+            self.out.write('\t')
+    
     def __printTag(self):
         """ Print the currentToken as an appropriate tag in xml file
             using currentToken and currentTokenType """
         
-        # Print the appropriate numbers of tabs, before the tag
-        for i in range(self.tabs):
-            self.out.write('\t')
+        self.__printTabs()
         
         # Print the tag and its value in the xml file
         self.out.write('<' + self.currentTokenType + '> ' + self.currentToken + ' <' + self.currentTokenType + '>\n')
@@ -111,6 +114,7 @@ class CompilationEngine:
         """ Compiles a complete class 
             Class: 'class' className '{' classVarDec* subroutineDec* '}' """
         
+        self.__printTabs()
         self.out.write('<class>\n') # Start <class> tag in output
         self.tabs += 1 # Add single Indentation to xml file tags from here
         
@@ -129,12 +133,14 @@ class CompilationEngine:
         self.__eat(['}']) # '}'
         
         self.tabs -= 1 # Remove single indentation from the tags
+        self.__printTabs()
         self.out.write('</class>')
     
     def compileClassVarDec(self):
         """ Compiles a static or a field declaration 
             ClassVarDec: ('static' | 'field') type varName (',' varName)* ';' """
         
+        self.__printTabs()
         self.out.write('<ClassVarDec>\n')
         
         self.tabs += 1 # increase indentation
@@ -146,6 +152,7 @@ class CompilationEngine:
         # Remove single indentation from the tags
         self.tabs -= 1
         
+        self.__printTabs()
         self.out.write('</ClassVarDec>\n')
     
     def compileSubroutine(self):
@@ -154,6 +161,7 @@ class CompilationEngine:
                         ('void' | type) subroutineName '(' parameterList ')'
                         subroutineBody """
         
+        self.__printTabs()
         self.out.write('<SubroutineDec>\n')
         self.tabs += 1 # increase indentation
         
@@ -188,12 +196,14 @@ class CompilationEngine:
         
         # Remove single indentation from the tags
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</SubroutineDec>\n')
     
     def compileParameterList(self):
         """ Compiles a parameter list(possibly empty) not including the enclosing ()
             ParameterList: ((type varName) (',' type varName)*)? """
         
+        self.__printTabs()
         self.out.write('<ParameterList>\n')
         self.tabs += 1 # add indentation
         
@@ -217,12 +227,14 @@ class CompilationEngine:
                 self.__printTag() # varName identifier
         
         self.tabs -= 1 # remove indentation
+        self.__printTabs()
         self.out.write('</ParameterList>\n')
     
     def compileVarDec(self):
         """ compiles a variable declaration 
             varDec: var type varName (',' varName)* ';' """
         
+        self.__printTabs()
         self.out.write('<VarDec>\n')
         self.tabs += 1 # increase indentation
         
@@ -232,6 +244,7 @@ class CompilationEngine:
         
         # Remove single indentation from the tags
         self.tabs -= 1
+        self.__printTabs()
         self.out.write('</VarDec>\n')
     
     def compileStatements(self):
@@ -355,8 +368,37 @@ class CompilationEngine:
         self.out.write('</ReturnStatement>\n')
     
     def compileIf(self):
-        """ Compiles an If statement, possibly with a trailing else clause """
+        """ Compiles an If statement, possibly with a trailing else clause
+            IfStatements: 'if' '(' expression ')' '{' statements '}'
+                          ('else' '{' statements '}')? """
         
+        self.out.write('<IfStatment>\n')
+        self.tabs += 1
+        
+        self.__eat('if')
+        self.__eat('(')
+        
+        self.compileExpression()
+        
+        self.__eat(')')
+        self.__eat('{')
+        
+        self.compileStatements()
+        
+        self.__eat('}')
+        
+        if self.currentToken == 'else':
+            self.__eat('else')
+            self.__eat('{')
+            
+            self.compileStatements()
+            
+            self.__eat('}')
+        
+        self.tabs -= 1
+        self.out.write('</IfStatement>\n')
+    
+    # There could be a problem with no tabs in self.out.write commands
     
     def compileExpression(self):
         """ Compiles an expression """
