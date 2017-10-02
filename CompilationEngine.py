@@ -242,8 +242,30 @@ class CompilationEngine:
         self.out.write('</VarDec>\n')
     
     def compileStatements(self):
-        """ Compiles series of statements, without {} """
+        """ Compiles series of statements, without {} 
+            statements: statement* 
+            statement: letStatement | doStatement | ifStatement | 
+                       whileStatement | returnStatement """
         
+        self.out.write('<Statements>\n')
+        self.tabs += 1
+        
+        while True:
+            if self.currentToken == 'do':
+                self.compileDo()
+            elif self.currentToken == 'let':
+                self.compileLet()
+            elif self.currentToken == 'while':
+                self.compileWhile()
+            elif self.currentToken == 'return':
+                self.compileReturn()
+            elif self.currentToken == 'if':
+                self.compileIf()
+            else:
+                break
+        
+        self.tabs -= 1
+        self.out.write('</Statements>\n')
     
     def compileDo(self):
         """ Compiles a do statement """
