@@ -189,6 +189,30 @@ class CompilationEngine:
     def compileParameterList(self):
         """ Compiles a parameter list(possibly empty) not including the enclosing () """
         
+        self.out.write('<ParameterList>\n')
+        self.tabs += 1 # add indentation
+        
+        if self.currentToken != ')':
+            # type: int | char | boolean | className
+            try:
+                self.__eat(['int', 'char', 'boolean'])
+            except:
+                self.__printTag()
+            
+            self.__printTag() # varName identifier
+            
+            while self.currentToken != ')':
+                self.__eat(',')
+                # type: int | char | boolean | className
+                try:
+                    self.__eat(['int', 'char', 'boolean'])
+                except:
+                    self.__printTag()
+                
+                self.__printTag() # varName identifier
+        
+        self.tabs -= 1 # remove indentation
+        self.out.write('</ParameterList>\n')
     
     def compileVarDec(self):
         """ compiles a variable declaration """
