@@ -338,8 +338,21 @@ class CompilationEngine:
         self.out.write('</WhileStatement>\n')
     
     def compileReturn(self):
-        """ Compiles a return statement """
+        """ Compiles a return statement
+            ReturnStatement: 'return' (expression)? ';' """
         
+        self.out.write('<ReturnStatement>\n')
+        self.tabs += 1
+        
+        self.__eat('return')
+        
+        if self.currentToken != ';':
+            self.compileExpression()
+        
+        self.__eat(';')
+        
+        self.tabs -= 1
+        self.out.write('</ReturnStatement>\n')
     
     def compileIf(self):
         """ Compiles an If statement, possibly with a trailing else clause """
