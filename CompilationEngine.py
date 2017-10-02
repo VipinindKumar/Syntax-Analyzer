@@ -260,6 +260,20 @@ class CompilationEngine:
         self.tabs -= 1
         self.out.write('</Statements>\n')
     
+    def __subroutineCall(self):
+        """ Compiles the subroutine call part of the program
+            SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.' 
+                            subroutineName '(' expressionList ')' """
+        
+        self.__printTag() # subroutineName | (className | varName)
+        
+        if self.currentToken == '.':
+            self.__printTag() # subroutineName
+        
+        self.__eat('(') # '('
+        self.compileExpressionList()
+        self.__eat(')') # ')'
+    
     def compileDo(self):
         """ Compiles a do statement 
             doStatment: 'do' subroutineCall ';' """
@@ -270,7 +284,12 @@ class CompilationEngine:
         self.__eat('do')
         
         # subrutineCall
+        self.__subroutineCall()
         
+        self.__eat(';') # ';'
+        
+        self.tabs -= 1
+        self.out.write('</DoStatement>\n')
     
     def compileLet(self):
         """ Compiles a Let statement """
