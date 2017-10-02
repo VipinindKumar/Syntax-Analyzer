@@ -316,8 +316,26 @@ class CompilationEngine:
         self.out.write('</LetStatement>\n')
     
     def compileWhile(self):
-        """ Compiles a while statement """
+        """ Compiles a while statement 
+            whileStatement: 'while' '(' expression ')' '{' statements '}' """
         
+        self.out.write('<WhileStatement>\n')
+        self.tabs += 1
+        
+        self.__eat('while')
+        self.__eat('(')
+        
+        self.compileExpression()
+        
+        self.__eat(')')
+        self.__eat('{')
+        
+        self.compileStatements()
+        
+        self.__eat('}')
+        
+        self.tabs -= 1
+        self.out.write('</WhileStatement>\n')
     
     def compileReturn(self):
         """ Compiles a return statement """
