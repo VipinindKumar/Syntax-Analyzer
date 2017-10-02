@@ -87,17 +87,14 @@ class CompilationEngine:
     
     
     def compileClass(self):
-        """ Compiles a complete class """
+        """ Compiles a complete class 
+            Class: 'class' className '{' classVarDec* subroutineDec* '}' """
         
         self.out.write('<class>\n') # Start <class> tag in output
-        
-        # Add single Indentation to xml file tags from here
-        self.tabs += 1
+        self.tabs += 1 # Add single Indentation to xml file tags from here
         
         self.__eat(['class']) # check that there is class keyword as next token and output the fact
-        
         self.__printTag() # Handles className identifier
-        
         self.__eat(['{']) # '{'
         
         # 0 or more class variable declarations
@@ -110,13 +107,12 @@ class CompilationEngine:
         
         self.__eat(['}']) # '}'
         
-        # Remove single indentation from the tags
-        self.tabs -= 1
-        
+        self.tabs -= 1 # Remove single indentation from the tags
         self.out.write('</class>')
     
     def compileClassVarDec(self):
-        """ Compiles a static or a field declaration """
+        """ Compiles a static or a field declaration 
+            ClassVarDec: ('static' | 'field') type varName (',' varName)* ',' """
         
         self.out.write('<ClassVarDec>\n')
         
@@ -146,10 +142,12 @@ class CompilationEngine:
         self.out.write('</ClassVarDec>\n')
     
     def compileSubroutine(self):
-        """ Compiles a complete method, function or constructor """
+        """ Compiles a complete method, function or constructor 
+            Subroutine: ('constructor' | 'method' | 'function')
+                        ('void' | type) subroutineName '(' parameterList ')'
+                        subroutineBody """
         
         self.out.write('<SubroutineDec>\n')
-        
         self.tabs += 1 # increase indentation
         
         self.__eat(['constructor', 'function', 'method']) # constructor | function | method
@@ -183,11 +181,11 @@ class CompilationEngine:
         
         # Remove single indentation from the tags
         self.tabs -= 1
-        
         self.out.write('</SubroutineDec>\n')
     
     def compileParameterList(self):
-        """ Compiles a parameter list(possibly empty) not including the enclosing () """
+        """ Compiles a parameter list(possibly empty) not including the enclosing ()
+            ParameterList: ((type varName) (',' type varName)*)? """
         
         self.out.write('<ParameterList>\n')
         self.tabs += 1 # add indentation
