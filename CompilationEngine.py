@@ -84,6 +84,27 @@ class CompilationEngine:
         else:
             self.__printTag()
     
+    def __varDec(self):
+        """ Compilea part of class variable declaration and 
+            variable declaration 
+            : type varName (',' varName)* ';' """
+        
+        # type: int | char | boolean | className
+        # can just use self.__printTag()
+        try:
+            self.__eat(['int', 'char', 'boolean'])
+        except:
+            self.__printTag()
+        
+        self.__printTag() # varName identifier
+        
+        # (',' varName)*
+        while self.currentToken != ';':
+            self.__eat(',')
+            self.__printTag() # varName identifier
+        
+        self.__eat(';') # ';'
+    
     
     
     def compileClass(self):
@@ -120,21 +141,7 @@ class CompilationEngine:
         
         self.__eat(['static', 'field']) # (static | field)
         
-        # type: int | char | boolean | className
-        # can just use self.__printTag()
-        try:
-            self.__eat(['int', 'char', 'boolean'])
-        except:
-            self.__printTag()
-        
-        self.__printTag() # varName identifier
-        
-        # (',' varName)*
-        while self.currentToken != ';':
-            self.__eat(',')
-            self.__printTag() # varName identifier
-        
-        self.__eat(';') # ';'
+        self.__varDec() # type varName (',' varName)* ';'
         
         # Remove single indentation from the tags
         self.tabs -= 1
@@ -221,21 +228,7 @@ class CompilationEngine:
         
         self.__eat(['var']) # var
         
-        # type: int | char | boolean | className
-        # can just use self.__printTag()
-        try:
-            self.__eat(['int', 'char', 'boolean'])
-        except:
-            self.__printTag()
-        
-        self.__printTag() # varName identifier
-        
-        # (',' varName)*
-        while self.currentToken != ';':
-            self.__eat(',')
-            self.__printTag() # varName identifier
-        
-        self.__eat(';') # ';'
+        self.__varDec() # type varName (',' varName)* ';'
         
         # Remove single indentation from the tags
         self.tabs -= 1
@@ -268,7 +261,15 @@ class CompilationEngine:
         self.out.write('</Statements>\n')
     
     def compileDo(self):
-        """ Compiles a do statement """
+        """ Compiles a do statement 
+            doStatment: 'do' subroutineCall ';' """
+        
+        self.out.write('<DoStatement>\n')
+        self.tabs += 1
+        
+        self.__eat('do')
+        
+        # subrutineCall
         
     
     def compileLet(self):
