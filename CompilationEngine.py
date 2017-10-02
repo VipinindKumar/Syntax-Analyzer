@@ -292,8 +292,28 @@ class CompilationEngine:
         self.out.write('</DoStatement>\n')
     
     def compileLet(self):
-        """ Compiles a Let statement """
+        """ Compiles a Let statement 
+        LetStatement: 'let' varName ('[' expression ']')? '=' expression ';' """
         
+        self.out.write('<LetStatement>\n')
+        self.tabs += 1
+        
+        self.__eat('let')
+        self.__printTag()
+        
+        if self.currentToken == '[':
+            self.__eat('[')
+            self.compileExpression()
+            self.__eat(']')
+        
+        self.__eat('=')
+        
+        self.compileExpression()
+        
+        self.__eat(';')
+        
+        self.tabs -= 1
+        self.out.write('</LetStatement>\n')
     
     def compileWhile(self):
         """ Compiles a while statement """
