@@ -205,11 +205,11 @@ class CompilationEngine:
         """ Compiles a parameter list(possibly empty) not including the enclosing ()
             ParameterList: ((type varName) (',' type varName)*)? """
         
-        self.__printTabs()
-        self.out.write('<ParameterList>\n')
-        self.tabs += 1 # add indentation
-        
         if self.currentToken != ')':
+            self.__printTabs()
+            self.out.write('<ParameterList>\n')
+            self.tabs += 1 # add indentation
+        
             # type: int | char | boolean | className
             try:
                 self.__eat(['int', 'char', 'boolean'])
@@ -228,9 +228,9 @@ class CompilationEngine:
                 
                 self.__printTag() # varName identifier
         
-        self.tabs -= 1 # remove indentation
-        self.__printTabs()
-        self.out.write('</ParameterList>\n')
+            self.tabs -= 1 # remove indentation
+            self.__printTabs()
+            self.out.write('</ParameterList>\n')
     
     def compileVarDec(self):
         """ compiles a variable declaration 
