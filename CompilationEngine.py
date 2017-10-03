@@ -64,9 +64,9 @@ class CompilationEngine:
                 self.currentToken = self.tokenizer.stringVal()
     
     def __printTabs(self):
-        """ Print the appropriate numbers of tabs, before the tag """
+        """ Print the appropriate numbers of tabs(two spaces), before the tag """
         for i in range(self.tabs):
-            self.out.write('\t')
+            self.out.write('  ')
     
     def __printTag(self):
         """ Print the currentToken as an appropriate tag in xml file
