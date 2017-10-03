@@ -63,9 +63,11 @@ class CompilationEngine:
             
             elif self.currentTokenType == 'INT_CONST':
                 self.currentToken = self.tokenizer.intVal()
+                self.currentTokenType = 'integerConstant'
             
             elif self.currentTokenType == 'STRING_CONST':
                 self.currentToken = self.tokenizer.stringVal()
+                self.currentTokenType = 'stringConstant'
     
     def __printTabs(self):
         """ Print the appropriate numbers of tabs(two spaces), before the tag """
@@ -459,7 +461,7 @@ class CompilationEngine:
         self.out.write('<term>\n')
         
         # integerConstant | StringConstant | keywordConstant
-        if self.currentTokenType in ['INT_CONST', 'STRING_CONST'] or self.currentToken in self.keywordConstant:
+        if self.currentTokenType in ['integerConstant', 'stringConstant'] or self.currentToken in self.keywordConstant:
             self.__printTag()
         
         # unaryOp term
