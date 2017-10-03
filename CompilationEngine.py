@@ -449,8 +449,57 @@ class CompilationEngine:
         self.out.write('</expression>\n')
     
     def compileTerm(self):
-        """ Compiles a Term """
-        pass
+        """ Compiles a Term 
+            Term: integerConstant | StringConstant | keywordConstant | 
+                  varName | varName '[' expression ']' | subroutineCall | 
+                  '(' expression ')' | unaryOp term """
+        
+        self.__printTabs()
+        self.tabs += 1
+        self.out.write('<term>\n')
+        
+        # integerConstant | StringConstant | keywordConstant
+        if self.currentTokenType in ['INT_CONST', 'STRING_CONST'] or self.currentToken in self.keywordConstant:
+            self.__printTag()
+        
+        # unaryOp term
+        elif self.currentToken in self.unaryOp:
+            self.__eat(self.unaryOp)
+            self.compileTerm()
+        
+        # '(' expression ')'
+        elif self.currentToken == '(':
+            self.__eat(['('])
+            self.compileExpression()
+            self.__eat([')'])
+        
+        else:
+            # varName | varName '[' expression ']' |
+            # subroutineCall: subroutineName '(' expressionList ')' |
+            #                (className | varName) '.' subroutineName '(' expressionList ')'
+            
+            self.__printTag() # varName | subroutineName | className
+            
+            if self.currentToken == '[': # varName '[' expression ']'
+                self.__eat(['['])
+                self.compileExpression()
+                self.__eat([']'])
+            
+            elif self.currentToken == '(': # subroutineName '(' expressionList ')'
+                self.__eat(['('])
+                self.compileExpressionList()
+                self.__eat([')'])
+            
+            elif self.currentToken == '.': # (className | varName) '.' subroutineName '(' expressionList ')'
+                self.__eat(['.'])
+                self.__printTag()
+                self.__eat(['('])
+                self.compileExpressionList()
+                self.__eat([')'])
+        
+        self.tabs -= 1
+        self.__printTabs()
+        self.out.write('</term>\n')
     
     def compileExpressionList(self):
         """ Compiles(possibly empty) comma separated list of expressions
