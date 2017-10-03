@@ -505,19 +505,19 @@ class CompilationEngine:
         """ Compiles(possibly empty) comma separated list of expressions
             ExpressionList: (expression (',' expression)* )? """
         
+        self.__printTabs()
+        self.out.write('<expressionList>\n')
+        self.tabs += 1
+        
         if self.currentToken != ')':
-            self.__printTabs()
-            self.out.write('<expressionList>\n')
-            self.tabs += 1
-            
             self.compileExpression()
             
             while self.currentToken == ',':
                 self.__eat([','])
                 self.compileExpression()
-            
-            self.tabs -= 1
-            self.__printTabs()
-            self.out.write('</expressionList>\n')
+        
+        self.tabs -= 1
+        self.__printTabs()
+        self.out.write('</expressionList>\n')
         
     
