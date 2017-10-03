@@ -135,6 +135,7 @@ class CompilationEngine:
         self.tabs -= 1 # Remove single indentation from the tags
         self.__printTabs()
         self.out.write('</class>')
+        self.out.close()
     
     def compileClassVarDec(self):
         """ Compiles a static or a field declaration 
@@ -412,11 +413,11 @@ class CompilationEngine:
     
     def compileExpression(self):
         """ Compiles an expression """
-        
+        pass
     
     def compileTerm(self):
         """ Compiles a Term """
-        
+        pass
     
     def compileExpressionList(self):
         """ Compiles(possibly empty) comma separated list of expressions 
