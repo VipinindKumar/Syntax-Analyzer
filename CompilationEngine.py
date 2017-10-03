@@ -19,6 +19,7 @@ class CompilationEngine:
         self.currentTokenType = ''
         self.tabs = 0
         
+        self.__advance()
     
     def __charRef(self, sym):
         """ Change <, >, &, " to their respective
@@ -83,7 +84,7 @@ class CompilationEngine:
             else an exception is thrown"""
         
         if self.currentToken not in stringList:
-            raise Exception('Expected ' + stringList + ' but found ' + self.currentToken)
+            raise Exception('Expected ' + str(stringList) + ' but found ' + self.currentToken)
         else:
             self.__printTag()
     
