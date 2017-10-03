@@ -403,7 +403,7 @@ class CompilationEngine:
                           ('else' '{' statements '}')? """
         
         self.__printTabs()
-        self.out.write('<ifStatment>\n')
+        self.out.write('<ifStatement>\n')
         self.tabs += 1
         
         self.__eat(['if'])
