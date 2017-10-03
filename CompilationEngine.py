@@ -75,7 +75,7 @@ class CompilationEngine:
         self.__printTabs()
         
         # Print the tag and its value in the xml file
-        self.out.write('<' + self.currentTokenType.lower() + '> ' + self.currentToken + ' <' + self.currentTokenType.lower() + '>\n')
+        self.out.write('<' + self.currentTokenType.lower() + '> ' + self.currentToken + ' </' + self.currentTokenType.lower() + '>\n')
         
         self.__advance() # advance the tokenizer
     
