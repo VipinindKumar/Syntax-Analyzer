@@ -42,7 +42,8 @@ class CompilationEngine:
         
         if not self.tokenizer.hasMoreTokens():
             # error
-            raise Exception('Unexpected end of file')
+            self.currentToken = ''
+            self.currentTokentype = ''
         else:
             self.tokenizer.advance()
             self.currentTokenType = self.tokenizer.tokenType()
