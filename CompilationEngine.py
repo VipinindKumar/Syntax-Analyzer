@@ -414,7 +414,8 @@ class CompilationEngine:
     
     def compileExpression(self):
         """ Compiles an expression """
-        pass
+        
+        self.__printTag()
     
     def compileTerm(self):
         """ Compiles a Term """
