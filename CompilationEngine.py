@@ -185,7 +185,14 @@ class CompilationEngine:
         
         self.__eat([')']) # ')'
         
+        
         # subroutineBody
+        # subroutineBody: '{' (varDec)* statements '}'
+        
+        self.__printTabs()
+        self.out.write('<subroutineBody>\n')
+        self.tabs += 1 # increase indentation
+        
         self.__eat(['{'])
         
         # (varDec)*
@@ -196,6 +203,10 @@ class CompilationEngine:
         self.compileStatements()
         
         self.__eat(['}'])
+        
+        self.tabs -= 1
+        self.__printTabs()
+        self.out.write('</subroutineBody>\n')
         
         # Remove single indentation from the tags
         self.tabs -= 1
