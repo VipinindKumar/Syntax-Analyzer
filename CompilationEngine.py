@@ -54,12 +54,15 @@ class CompilationEngine:
             
             if self.currentTokenType == 'KEYWORD':
                 self.currentToken = self.tokenizer.keyword()
+                self.currentTokenType = 'keyword'
             
             elif self.currentTokenType == 'SYMBOL':
                 self.currentToken = self.tokenizer.symbol()
+                self.currentTokenType = 'symbol'
             
             elif self.currentTokenType == 'IDENTIFIER':
                 self.currentToken = self.tokenizer.identifier()
+                self.currentTokenType = 'identifier'
             
             elif self.currentTokenType == 'INT_CONST':
                 self.currentToken = self.tokenizer.intVal()
@@ -81,7 +84,7 @@ class CompilationEngine:
         self.__printTabs()
         
         # Print the tag and its value in the xml file
-        self.out.write('<' + self.currentTokenType.lower() + '> ' + self.currentToken + ' </' + self.currentTokenType.lower() + '>\n')
+        self.out.write('<' + self.currentTokenType + '> ' + self.currentToken + ' </' + self.currentTokenType + '>\n')
         
         self.__advance() # advance the tokenizer
     
