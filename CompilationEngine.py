@@ -145,7 +145,7 @@ class CompilationEngine:
         
         self.tabs -= 1 # Remove single indentation from the tags
         self.__printTabs()
-        self.out.write('</class>')
+        self.out.write('</class>\n')
         self.out.close()
     
     def compileClassVarDec(self):
