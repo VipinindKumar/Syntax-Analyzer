@@ -83,7 +83,7 @@ class CompilationEngine:
             else an exception is thrown"""
         
         if self.currentToken in stringList:
-            raise Exception('Expected ' + self.currentToken + 'but found ' + self.currentToken)
+            raise Exception('Expected ' + self.currentToken + ' but found ' + self.currentToken)
         else:
             self.__printTag()
     
@@ -103,10 +103,10 @@ class CompilationEngine:
         
         # (',' varName)*
         while self.currentToken != ';':
-            self.__eat(',')
+            self.__eat([','])
             self.__printTag() # varName identifier
         
-        self.__eat(';') # ';'
+        self.__eat([';']) # ';'
     
     
     
@@ -177,14 +177,14 @@ class CompilationEngine:
         
         self.__printTag() # subroutineName identifier
         
-        self.__eat('(') # '('
+        self.__eat(['(']) # '('
         
         self.compileParameterList()
         
-        self.__eat(')') # ')'
+        self.__eat([')']) # ')'
         
         # subroutineBody
-        self.__eat('{')
+        self.__eat(['{'])
         
         # (varDec)*
         while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
@@ -193,7 +193,7 @@ class CompilationEngine:
         # statements
         self.compileStatements()
         
-        self.__eat('}')
+        self.__eat(['}'])
         
         # Remove single indentation from the tags
         self.tabs -= 1
@@ -218,7 +218,7 @@ class CompilationEngine:
             self.__printTag() # varName identifier
             
             while self.currentToken != ')':
-                self.__eat(',')
+                self.__eat([','])
                 # type: int | char | boolean | className
                 try:
                     self.__eat(['int', 'char', 'boolean'])
@@ -286,9 +286,9 @@ class CompilationEngine:
         if self.currentToken == '.':
             self.__printTag() # subroutineName
         
-        self.__eat('(') # '('
+        self.__eat(['(']) # '('
         self.compileExpressionList()
-        self.__eat(')') # ')'
+        self.__eat([')']) # ')'
     
     def compileDo(self):
         """ Compiles a do statement 
@@ -298,12 +298,12 @@ class CompilationEngine:
         self.out.write('<DoStatement>\n')
         self.tabs += 1
         
-        self.__eat('do')
+        self.__eat(['do'])
         
         # subrutineCall
         self.__subroutineCall()
         
-        self.__eat(';') # ';'
+        self.__eat([';']) # ';'
         
         self.tabs -= 1
         self.__printTabs()
@@ -317,19 +317,19 @@ class CompilationEngine:
         self.out.write('<LetStatement>\n')
         self.tabs += 1
         
-        self.__eat('let')
+        self.__eat(['let'])
         self.__printTag()
         
         if self.currentToken == '[':
-            self.__eat('[')
+            self.__eat(['['])
             self.compileExpression()
-            self.__eat(']')
+            self.__eat([']'])
         
-        self.__eat('=')
+        self.__eat(['='])
         
         self.compileExpression()
         
-        self.__eat(';')
+        self.__eat([';'])
         
         self.tabs -= 1
         self.__printTabs()
@@ -343,17 +343,17 @@ class CompilationEngine:
         self.out.write('<WhileStatement>\n')
         self.tabs += 1
         
-        self.__eat('while')
-        self.__eat('(')
+        self.__eat(['while'])
+        self.__eat(['('])
         
         self.compileExpression()
         
-        self.__eat(')')
-        self.__eat('{')
+        self.__eat([')'])
+        self.__eat(['{'])
         
         self.compileStatements()
         
-        self.__eat('}')
+        self.__eat(['}'])
         
         self.tabs -= 1
         self.__printTabs()
@@ -367,12 +367,12 @@ class CompilationEngine:
         self.out.write('<ReturnStatement>\n')
         self.tabs += 1
         
-        self.__eat('return')
+        self.__eat(['return'])
         
         if self.currentToken != ';':
             self.compileExpression()
         
-        self.__eat(';')
+        self.__eat([';'])
         
         self.tabs -= 1
         self.__printTabs()
@@ -387,25 +387,25 @@ class CompilationEngine:
         self.out.write('<IfStatment>\n')
         self.tabs += 1
         
-        self.__eat('if')
-        self.__eat('(')
+        self.__eat(['if'])
+        self.__eat(['('])
         
         self.compileExpression()
         
-        self.__eat(')')
-        self.__eat('{')
+        self.__eat([')'])
+        self.__eat(['{'])
         
         self.compileStatements()
         
-        self.__eat('}')
+        self.__eat(['}'])
         
         if self.currentToken == 'else':
-            self.__eat('else')
-            self.__eat('{')
+            self.__eat(['else'])
+            self.__eat(['{'])
             
             self.compileStatements()
             
-            self.__eat('}')
+            self.__eat(['}'])
         
         self.tabs -= 1
         self.__printTabs()
@@ -431,7 +431,7 @@ class CompilationEngine:
             self.compileExpression()
             
             while self.currentToken == ',':
-                self.__eat(',')
+                self.__eat([','])
                 self.compileExpression()
             
             self.tabs -= 1
