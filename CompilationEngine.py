@@ -4,6 +4,10 @@ class CompilationEngine:
     """ Gets its input from JackTokenizer and 
         emits it parsed structure in output stream/file """
     
+    op = ['+', '-', '*', '/', '&', '|', '<', '>', '=']
+    unaryOp = ['-', '~']
+    keywordConstant = ['true', 'false', 'null', 'this']
+    
     def __init__(self, inFile, outFile):
         """ Creates a new CompilationEngine with given
             input and output. The next routine called must
@@ -427,9 +431,22 @@ class CompilationEngine:
         self.out.write('</ifStatement>\n')
     
     def compileExpression(self):
-        """ Compiles an expression """
+        """ Compiles an expression 
+            expression: term (op term)* """
         
-        self.__printTag()
+        self.__printTabs()
+        self.out.write('<expression>\n')
+        self.tabs += 1
+        
+        self.compileTerm()
+        
+        while self.currentToken in self.op:
+            self.__eat(self.op)
+            self.compileTerm()
+        
+        self.tabs -= 1
+        self.__printTabs()
+        self.out.write('</expression>\n')
     
     def compileTerm(self):
         """ Compiles a Term """
