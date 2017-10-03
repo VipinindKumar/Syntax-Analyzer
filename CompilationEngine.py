@@ -82,8 +82,8 @@ class CompilationEngine:
             and if it does it advances the tokenizer
             else an exception is thrown"""
         
-        if self.currentToken in stringList:
-            raise Exception('Expected ' + self.currentToken + ' but found ' + self.currentToken)
+        if self.currentToken not in stringList:
+            raise Exception('Expected ' + stringList + ' but found ' + self.currentToken)
         else:
             self.__printTag()
     
