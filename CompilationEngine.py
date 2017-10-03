@@ -144,7 +144,7 @@ class CompilationEngine:
             ClassVarDec: ('static' | 'field') type varName (',' varName)* ';' """
         
         self.__printTabs()
-        self.out.write('<ClassVarDec>\n')
+        self.out.write('<classVarDec>\n')
         
         self.tabs += 1 # increase indentation
         
@@ -156,7 +156,7 @@ class CompilationEngine:
         self.tabs -= 1
         
         self.__printTabs()
-        self.out.write('</ClassVarDec>\n')
+        self.out.write('</classVarDec>\n')
     
     def compileSubroutine(self):
         """ Compiles a complete method, function or constructor 
@@ -165,7 +165,7 @@ class CompilationEngine:
                         subroutineBody """
         
         self.__printTabs()
-        self.out.write('<SubroutineDec>\n')
+        self.out.write('<subroutineDec>\n')
         self.tabs += 1 # increase indentation
         
         self.__eat(['constructor', 'function', 'method']) # constructor | function | method
@@ -200,7 +200,7 @@ class CompilationEngine:
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</SubroutineDec>\n')
+        self.out.write('</subroutineDec>\n')
     
     def compileParameterList(self):
         """ Compiles a parameter list(possibly empty) not including the enclosing ()
@@ -208,7 +208,7 @@ class CompilationEngine:
         
         if self.currentToken != ')':
             self.__printTabs()
-            self.out.write('<ParameterList>\n')
+            self.out.write('<parameterList>\n')
             self.tabs += 1 # add indentation
         
             # type: int | char | boolean | className
@@ -231,14 +231,14 @@ class CompilationEngine:
         
             self.tabs -= 1 # remove indentation
             self.__printTabs()
-            self.out.write('</ParameterList>\n')
+            self.out.write('</parameterList>\n')
     
     def compileVarDec(self):
         """ compiles a variable declaration 
             varDec: var type varName (',' varName)* ';' """
         
         self.__printTabs()
-        self.out.write('<VarDec>\n')
+        self.out.write('<varDec>\n')
         self.tabs += 1 # increase indentation
         
         self.__eat(['var']) # var
@@ -248,7 +248,7 @@ class CompilationEngine:
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</VarDec>\n')
+        self.out.write('</varDec>\n')
     
     def compileStatements(self):
         """ Compiles series of statements, without {} 
@@ -257,7 +257,7 @@ class CompilationEngine:
                        whileStatement | returnStatement """
         
         self.__printTabs()
-        self.out.write('<Statements>\n')
+        self.out.write('<statements>\n')
         self.tabs += 1
         
         while True:
@@ -276,7 +276,7 @@ class CompilationEngine:
         
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</Statements>\n')
+        self.out.write('</statements>\n')
     
     def __subroutineCall(self):
         """ Compiles the subroutine call part of the program
@@ -298,7 +298,7 @@ class CompilationEngine:
             doStatment: 'do' subroutineCall ';' """
         
         self.__printTabs()
-        self.out.write('<DoStatement>\n')
+        self.out.write('<doStatement>\n')
         self.tabs += 1
         
         self.__eat(['do'])
@@ -310,14 +310,14 @@ class CompilationEngine:
         
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</DoStatement>\n')
+        self.out.write('</doStatement>\n')
     
     def compileLet(self):
         """ Compiles a Let statement 
         LetStatement: 'let' varName ('[' expression ']')? '=' expression ';' """
         
         self.__printTabs()
-        self.out.write('<LetStatement>\n')
+        self.out.write('<letStatement>\n')
         self.tabs += 1
         
         self.__eat(['let'])
@@ -336,14 +336,14 @@ class CompilationEngine:
         
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</LetStatement>\n')
+        self.out.write('</letStatement>\n')
     
     def compileWhile(self):
         """ Compiles a while statement 
             whileStatement: 'while' '(' expression ')' '{' statements '}' """
         
         self.__printTabs()
-        self.out.write('<WhileStatement>\n')
+        self.out.write('<whileStatement>\n')
         self.tabs += 1
         
         self.__eat(['while'])
@@ -360,14 +360,14 @@ class CompilationEngine:
         
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</WhileStatement>\n')
+        self.out.write('</whileStatement>\n')
     
     def compileReturn(self):
         """ Compiles a return statement
             ReturnStatement: 'return' (expression)? ';' """
         
         self.__printTabs()
-        self.out.write('<ReturnStatement>\n')
+        self.out.write('<returnStatement>\n')
         self.tabs += 1
         
         self.__eat(['return'])
@@ -379,7 +379,7 @@ class CompilationEngine:
         
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</ReturnStatement>\n')
+        self.out.write('</returnStatement>\n')
     
     def compileIf(self):
         """ Compiles an If statement, possibly with a trailing else clause
@@ -387,7 +387,7 @@ class CompilationEngine:
                           ('else' '{' statements '}')? """
         
         self.__printTabs()
-        self.out.write('<IfStatment>\n')
+        self.out.write('<ifStatment>\n')
         self.tabs += 1
         
         self.__eat(['if'])
@@ -412,7 +412,7 @@ class CompilationEngine:
         
         self.tabs -= 1
         self.__printTabs()
-        self.out.write('</IfStatement>\n')
+        self.out.write('</ifStatement>\n')
     
     def compileExpression(self):
         """ Compiles an expression """
@@ -429,7 +429,7 @@ class CompilationEngine:
         
         if self.currentToken != ')':
             self.__printTabs()
-            self.out.write('<ExpressionList>\n')
+            self.out.write('<expressionList>\n')
             self.tabs += 1
             
             self.compileExpression()
@@ -440,6 +440,6 @@ class CompilationEngine:
             
             self.tabs -= 1
             self.__printTabs()
-            self.out.write('</ExpressionList>\n')
+            self.out.write('</expressionList>\n')
         
     
