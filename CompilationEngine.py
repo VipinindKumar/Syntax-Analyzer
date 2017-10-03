@@ -285,6 +285,7 @@ class CompilationEngine:
         self.__printTag() # subroutineName | (className | varName)
         
         if self.currentToken == '.':
+            self.__eat(['.'])
             self.__printTag() # subroutineName
         
         self.__eat(['(']) # '('
@@ -422,7 +423,7 @@ class CompilationEngine:
         pass
     
     def compileExpressionList(self):
-        """ Compiles(possibly empty) comma separated list of expressions 
+        """ Compiles(possibly empty) comma separated list of expressions
             ExpressionList: (expression (',' expression)* )? """
         
         if self.currentToken != ')':
