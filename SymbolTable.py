@@ -73,7 +73,12 @@ class SymbolTabel:
     def typeOf(self, name):
         """ Returns the type of the named variable in the current scope """
         
-        
+        if name in self.subDict:
+            return self.subDict[name][0]
+        elif name in self.classDict:
+            return self.classDict[name][0]
+        else:
+            return 'NONE'
     
     def indexOf(self, name):
         """ Returns the index assigned to the named variable """
