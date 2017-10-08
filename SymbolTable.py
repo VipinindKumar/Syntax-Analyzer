@@ -63,7 +63,12 @@ class SymbolTabel:
             in the current scope. 
             If the identifier is unknown in the current scope return NONE """
         
-        
+        if name in self.subDict:
+            return self.subDict[name][1]
+        elif name in self.classDict:
+            return self.classDict[name][1]
+        else:
+            return 'NONE'
     
     def typeOf(self, name):
         """ Returns the type of the named variable in the current scope """
