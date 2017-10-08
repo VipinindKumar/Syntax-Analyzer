@@ -83,4 +83,9 @@ class SymbolTabel:
     def indexOf(self, name):
         """ Returns the index assigned to the named variable """
         
-        
+        if name in self.subDict:
+            return self.subDict[name][2]
+        elif name in self.classDict:
+            return self.classDict[name][2]
+        else:
+            return -1
