@@ -1,4 +1,4 @@
-class SymbolTabel:
+class SymbolTable:
     """ Symbol Table is a class that stores an identifier 
         and all its properties like name, type, kind and runnign index
         in a python dictionary. For two scopes of Jack program

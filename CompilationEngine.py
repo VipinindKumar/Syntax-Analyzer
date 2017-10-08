@@ -1,4 +1,5 @@
 import JackTokenizer
+import SymbolTable
 
 class CompilationEngine:
     """ Gets its input from JackTokenizer and 
@@ -15,6 +16,9 @@ class CompilationEngine:
         
         # Create an object of JackTokenizer with the input file
         self.tokenizer = JackTokenizer.JackTokenizer(inFile)
+        
+        # Create an object of SymbolTable
+        self.symbolTable = SymbolTable.SymbolTable()
         
         # Open a output file to write to
         self.out = open(outFile, 'w')
@@ -128,6 +132,9 @@ class CompilationEngine:
         self.__printTabs()
         self.out.write('<class>\n') # Start <class> tag in output
         self.tabs += 1 # Add single Indentation to xml file tags from here
+        
+        # Start the symbol table to store the variables
+        
         
         self.__eat(['class']) # check that there is class keyword as next token and output the fact
         self.__printTag() # Handles className identifier
