@@ -47,7 +47,16 @@ class SymbolTabel:
         """ Returns the number of variables of the given kind already defined
             in the current scope """
         
-        
+        if kind == 'STATIC':
+            return self.static
+        elif kind == 'FIELD':
+            return self.field
+        elif kind == 'ARG':
+            return self.arg
+        elif kind == 'VAR':
+            return self.var
+        else:
+            raise ValueError('Not a valid kind of identifier')
     
     def kindOf(self, name):
         """ Returns the kind(STATIC, FIELD, VAR, ARG, NONE) of the named identifier
