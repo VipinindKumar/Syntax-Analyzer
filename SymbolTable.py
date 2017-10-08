@@ -14,7 +14,7 @@ class SymbolTabel:
         """ Starts a new subroutine scope, ie.
             resets the subroutine's symbole table """
         
-        
+        self.subDict = {}
     
     def define(self, name, vartype, kind):
         """ Defines a new identifier of a given name, vartype and kind and
