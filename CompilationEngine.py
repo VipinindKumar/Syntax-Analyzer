@@ -102,10 +102,13 @@ class CompilationEngine:
         else:
             self.__printTag()
     
-    def __varDec(self):
+    def __varDec(self, kind):
         """ Compilea part of class variable declaration and 
             variable declaration 
             : type varName (',' varName)* ';' """
+        
+        # Store the type of variable
+        vartype = self.currentToken
         
         # type: int | char | boolean | className
         # can just use self.__printTag()
@@ -113,6 +116,12 @@ class CompilationEngine:
             self.__eat(['int', 'char', 'boolean'])
         except:
             self.__printTag()
+        
+        # Store the name of the variable
+        name = self.currentToken
+        
+        # Store the complete variable definition in the symbolTable
+        self.symbolTable.define(name, vartype, kind)
         
         self.__printTag() # varName identifier
         
@@ -132,9 +141,6 @@ class CompilationEngine:
         self.__printTabs()
         self.out.write('<class>\n') # Start <class> tag in output
         self.tabs += 1 # Add single Indentation to xml file tags from here
-        
-        # Start the symbol table to store the variables
-        
         
         self.__eat(['class']) # check that there is class keyword as next token and output the fact
         self.__printTag() # Handles className identifier
@@ -164,9 +170,12 @@ class CompilationEngine:
         
         self.tabs += 1 # increase indentation
         
+        # Store the kind of variable being declared
+        kind = self.currentToken
+        
         self.__eat(['static', 'field']) # (static | field)
         
-        self.__varDec() # type varName (',' varName)* ';'
+        self.__varDec(kind) # type varName (',' varName)* ';'
         
         # Remove single indentation from the tags
         self.tabs -= 1
