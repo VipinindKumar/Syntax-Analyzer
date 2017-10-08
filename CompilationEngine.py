@@ -128,6 +128,11 @@ class CompilationEngine:
         # (',' varName)*
         while self.currentToken != ';':
             self.__eat([','])
+            # Store the name of the variable
+            name = self.currentToken
+            # Store the complete variable definition in the symbolTable
+            self.symbolTable.define(name, vartype, kind)
+            
             self.__printTag() # varName identifier
         
         self.__eat([';']) # ';'
