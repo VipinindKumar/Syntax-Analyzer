@@ -361,7 +361,11 @@ class CompilationEngine:
             SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.' 
                             subroutineName '(' expressionList ')' """
         
-        self.__printTag() # subroutineName | (className | varName)
+        # subroutineName | (className | varName)
+        if self.symbolTable.kindOf(self.currentToken) != 'NONE':
+            self.__printIdentifier(self.currentToken)
+        else:
+            self.__printTag()
         
         if self.currentToken == '.':
             self.__eat(['.'])
