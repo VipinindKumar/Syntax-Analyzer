@@ -102,6 +102,20 @@ class CompilationEngine:
         else:
             self.__printTag()
     
+    def __printIdentifier(self, name, mode=''):
+        """ print the variable with all its components
+            and advance the tokenizer """
+        
+        if mode == 'DEC':
+            self.currentTokenType = 'identifierDeclaration'
+        else:
+            self.currentTokenType = 'identifierUse'
+        
+        # x, int, VAR, 0
+        self.currentToken = name + ', ' + self.symbolTable.typeOf(name) + ', ' + self.symbolTable.kindOf(name) + ', ' + self.symbolTable.indexOf(name)
+        
+        self.__printTag()
+    
     def __varDec(self, kind):
         """ Compilea part of class variable declaration and 
             variable declaration 
@@ -123,7 +137,8 @@ class CompilationEngine:
         # Store the complete variable definition in the symbolTable
         self.symbolTable.define(name, vartype, kind.upper())
         
-        self.__printTag() # varName identifier
+        # self.__printTag() # varName identifier
+        self.__printIdentifier('DEC', name)
         
         # (',' varName)*
         while self.currentToken != ';':
