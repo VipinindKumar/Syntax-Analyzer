@@ -30,16 +30,16 @@ class SymbolTable:
             VAR and ARG identifiers have a subroutine scope """
         
         if kind == 'STATIC':
-            self.classDict[name] = [vartype, kind, self.static]
+            self.classDict[name] = [vartype, kind, str(self.static)]
             self.static += 1
         elif kind == 'FIELD':
-            self.classDict[name] = [vartype, kind, self.field]
+            self.classDict[name] = [vartype, kind, str(self.field)]
             self.field += 1
         elif kind == 'ARG':
-            self.subDict[name] = [vartype, kind, self.arg]
+            self.subDict[name] = [vartype, kind, str(self.arg)]
             self.arg += 1
         elif kind == 'VAR':
-            self.subDict[name] = [vartype, kind, self.var]
+            self.subDict[name] = [vartype, kind, str(self.var)]
             self.var += 1
         else:
             raise ValueError('Not a valid kind of identifier')
