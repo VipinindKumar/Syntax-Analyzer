@@ -303,7 +303,7 @@ class CompilationEngine:
         
         self.__eat(['var']) # var
         
-        self.__varDec() # type varName (',' varName)* ';'
+        self.__varDec('VAR') # type varName (',' varName)* ';'
         
         # Remove single indentation from the tags
         self.tabs -= 1
