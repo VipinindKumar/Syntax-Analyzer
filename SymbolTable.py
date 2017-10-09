@@ -9,6 +9,7 @@ class SymbolTable:
         """ Creates a new empty symbol table """
         
         self.classDict = {}
+        self.subDict = {}
         
         self.static = 0
         self.field = 0
