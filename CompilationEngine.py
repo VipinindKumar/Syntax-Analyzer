@@ -148,6 +148,7 @@ class CompilationEngine:
         self.tabs += 1 # Add single Indentation to xml file tags from here
         
         self.__eat(['class']) # check that there is class keyword as next token and output the fact
+        self.className = self.currentToken # Saves the name of the current class
         self.__printTag() # Handles className identifier
         self.__eat(['{']) # '{'
         
@@ -197,6 +198,13 @@ class CompilationEngine:
         self.__printTabs()
         self.out.write('<subroutineDec>\n')
         self.tabs += 1 # increase indentation
+        
+        # Start the subroutine variable declarations
+        self.symbolTable.startSubroutine()
+        
+        # Add 'this' as 'argument 0' in symbolTable in case of a method
+        if self.currentToken == 'method':
+            self.symbolTable.define('this', self.className, 'ARG')
         
         self.__eat(['constructor', 'function', 'method']) # constructor | function | method
         
