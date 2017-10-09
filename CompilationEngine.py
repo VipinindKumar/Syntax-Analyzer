@@ -285,10 +285,11 @@ class CompilationEngine:
                 self.__printTag()
             
             name = self.currentToken
-            self.__printTag() # varName identifier
-            
             # add the vaariable into the symbolTable
             self.symbolTable.define(name, vartype, 'ARG')
+            
+            # self.__printTag() # varName identifier
+            self.__printIdentifier('DEC', name)
             
             while self.currentToken != ')':
                 self.__eat([','])
@@ -300,10 +301,11 @@ class CompilationEngine:
                     self.__printTag()
                 
                 name = self.currentToken
-                self.__printTag() # varName identifier
-                
                 # add the vaariable into the symbolTable
                 self.symbolTable.define(name, vartype, 'ARG')
+                
+                # self.__printTag() # varName identifier
+                self.__printIdentifier('DEC', name)
         
         self.tabs -= 1 # remove indentation
         self.__printTabs()
