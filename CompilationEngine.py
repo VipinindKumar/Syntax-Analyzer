@@ -148,7 +148,8 @@ class CompilationEngine:
             # Store the complete variable definition in the symbolTable
             self.symbolTable.define(name, vartype, kind.upper())
             
-            self.__printTag() # varName identifier
+            # self.__printTag() # varName identifier
+            self.__printIdentifier('DEC', name)
         
         self.__eat([';']) # ';'
     
