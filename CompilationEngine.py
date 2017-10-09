@@ -262,22 +262,32 @@ class CompilationEngine:
         if self.currentToken != ')':
         
             # type: int | char | boolean | className
+            vartype = self.currentToken
             try:
                 self.__eat(['int', 'char', 'boolean'])
             except:
                 self.__printTag()
             
+            name = self.currentToken
             self.__printTag() # varName identifier
+            
+            # add the vaariable into the symbolTable
+            self.symbolTable.define(name, vartype, 'ARG')
             
             while self.currentToken != ')':
                 self.__eat([','])
                 # type: int | char | boolean | className
+                vartype = self.currentToken
                 try:
                     self.__eat(['int', 'char', 'boolean'])
                 except:
                     self.__printTag()
                 
+                name = self.currentToken
                 self.__printTag() # varName identifier
+                
+                # add the vaariable into the symbolTable
+                self.symbolTable.define(name, vartype, 'ARG')
         
         self.tabs -= 1 # remove indentation
         self.__printTabs()
