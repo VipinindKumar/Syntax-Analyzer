@@ -121,7 +121,7 @@ class CompilationEngine:
         name = self.currentToken
         
         # Store the complete variable definition in the symbolTable
-        self.symbolTable.define(name, vartype, kind)
+        self.symbolTable.define(name, vartype, kind.upper())
         
         self.__printTag() # varName identifier
         
@@ -131,7 +131,7 @@ class CompilationEngine:
             # Store the name of the variable
             name = self.currentToken
             # Store the complete variable definition in the symbolTable
-            self.symbolTable.define(name, vartype, kind)
+            self.symbolTable.define(name, vartype, kind.upper())
             
             self.__printTag() # varName identifier
         
