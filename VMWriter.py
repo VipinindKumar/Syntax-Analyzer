@@ -67,7 +67,7 @@ class VMWriter:
     def writeReturn(self):
         """ Writes a VM return command """
         
-        
+        self.out.write('return')
     
     def close(self):
         """ Close the file """
