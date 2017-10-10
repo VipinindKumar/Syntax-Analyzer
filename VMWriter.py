@@ -1,10 +1,11 @@
 class VMWriter:
     """ Emits VM commands into a file, using the VM command syntax """
     
-    def __init__(self, outfile):
+    def __init__(self, outFile):
         """ Creates a new file and prepare it for writing """
         
-        
+        # Open a output file to write to
+        self.out = open(outFile, 'w')
     
     def writePush(self, segment, index):
         """ Writes a VM push command
