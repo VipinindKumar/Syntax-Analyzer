@@ -72,5 +72,5 @@ class VMWriter:
     def close(self):
         """ Close the file """
         
-        
+        self.out.close()
     
