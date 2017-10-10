@@ -57,7 +57,7 @@ class VMWriter:
     def writeCall(self, name , nArgs):
         """ Writes a VM call command """
         
-        
+        self.out.write('call ' + name + ' ' + nArgs)
     
     def writefunction(self, name, nLocals):
         """ Writes a VM function command """
