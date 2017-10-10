@@ -52,7 +52,7 @@ class VMWriter:
     def writeIf(self, label):
         """ Writes a VM If-goto command """
         
-        
+        self.out.write('if-goto ' + label.upper())
     
     def writeCall(self, name , nArgs):
         """ Writes a VM call command """
