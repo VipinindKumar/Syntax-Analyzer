@@ -1,5 +1,6 @@
 import JackTokenizer
 import SymbolTable
+import VMWriter
 
 class CompilationEngine:
     """ Gets its input from JackTokenizer and 
@@ -19,6 +20,9 @@ class CompilationEngine:
         
         # Create an object of SymbolTable
         self.symbolTable = SymbolTable.SymbolTable()
+        
+        # Create an object of VMWriter
+        self.vmWriter = VMWriter.VMWriter(outFile)
         
         # Open a output file to write to
         self.out = open(outFile, 'w')
@@ -164,7 +168,9 @@ class CompilationEngine:
         self.tabs += 1 # Add single Indentation to xml file tags from here
         
         self.__eat(['class']) # check that there is class keyword as next token and output the fact
+        
         self.className = self.currentToken # Saves the name of the current class
+        
         self.__printTag() # Handles className identifier
         self.__eat(['{']) # '{'
         
@@ -231,6 +237,8 @@ class CompilationEngine:
         except:
             self.__printTag()
         
+        subroutineName = self.currentToken
+        
         self.__printTag() # subroutineName identifier
         
         self.__eat(['(']) # '('
@@ -249,9 +257,13 @@ class CompilationEngine:
         
         self.__eat(['{'])
         
+        nLocals = 0
         # (varDec)*
         while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
             self.compileVarDec()
+            nLocals += 1
+        
+        self.vmWriter.writeFunction(self.className + '.' + subroutineName, nLocals)
         
         # statements
         self.compileStatements()
