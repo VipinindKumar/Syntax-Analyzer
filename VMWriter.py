@@ -18,4 +18,44 @@ class VMWriter:
         
         
     
-    def 
+    def writeArithmetic(self, command):
+        """ Writes an Arithmetic command
+            command: ADD, SUB, NEG, EQ, GT, LT, AND, OR, NOT """
+        
+        
+    
+    def writeLabel(self, label):
+        """ Writes a VM label command """
+        
+        
+    
+    def writeGoto(self, label):
+        """ Writes a VM goto command """
+        
+        
+    
+    def writeIf(self, label):
+        """ Writes a VM If-goto command """
+        
+        
+    
+    def writeCall(self, name , nArgs):
+        """ Writes a VM call command """
+        
+        
+    
+    def writefunction(self, name, nLocals):
+        """ Writes a VM function command """
+        
+        
+    
+    def writeReturn(self):
+        """ Writes a VM return command """
+        
+        
+    
+    def close(self):
+        """ Close the file """
+        
+        
+    
