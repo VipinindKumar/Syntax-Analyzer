@@ -138,7 +138,7 @@ class CompilationEngine:
         self.symbolTable.define(name, vartype, kind.upper())
         
         # self.__printTag() # varName identifier
-        self.__printIdentifier('DEC', name)
+        self.__printIdentifier(name, 'DEC')
         
         # (',' varName)*
         while self.currentToken != ';':
@@ -149,7 +149,7 @@ class CompilationEngine:
             self.symbolTable.define(name, vartype, kind.upper())
             
             # self.__printTag() # varName identifier
-            self.__printIdentifier('DEC', name)
+            self.__printIdentifier(name, 'DEC')
         
         self.__eat([';']) # ';'
     
