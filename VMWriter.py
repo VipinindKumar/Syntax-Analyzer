@@ -42,7 +42,7 @@ class VMWriter:
     def writeLabel(self, label):
         """ Writes a VM label command """
         
-        
+        self.out.write('(' + label.upper() + ')')
     
     def writeGoto(self, label):
         """ Writes a VM goto command """
