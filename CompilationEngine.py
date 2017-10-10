@@ -373,19 +373,38 @@ class CompilationEngine:
             SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.' 
                             subroutineName '(' expressionList ')' """
         
+        className = ''
+        name = ''
         # subroutineName | (className | varName)
         if self.symbolTable.kindOf(self.currentToken) != 'NONE':
+            # Save the name of the class variable is refering to
+            className = self.symoblTable.typeOf(self.currentToken)
+            
             self.__printIdentifier(self.currentToken)
         else:
+            name = self.currentToken
             self.__printTag()
         
         if self.currentToken == '.':
+            # in the case of '.', it should be className.name(expressionList)
+            # set className to name, only run if it's a class
+            if name:
+                className = name
+            
             self.__eat(['.'])
+            
+            name = self.currentToken
             self.__printTag() # subroutineName
         
         self.__eat(['(']) # '('
-        self.compileExpressionList()
+        nArgs = self.compileExpressionList()
         self.__eat([')']) # ')'
+        
+        # build the name of the function to call, if className.name(expressionList)
+        if className:
+            name = className + '.' + name
+        # Write call vm command
+        self.vmWriter.writeCall(name, nArgs)
     
     def compileDo(self):
         """ Compiles a do statement 
@@ -591,15 +610,19 @@ class CompilationEngine:
         self.out.write('<expressionList>\n')
         self.tabs += 1
         
+        nArgs = 0
         if self.currentToken != ')':
             self.compileExpression()
+            nArgs += 1
             
             while self.currentToken == ',':
                 self.__eat([','])
                 self.compileExpression()
+                nArgs += 1
         
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</expressionList>\n')
         
+        return nArgs
     
