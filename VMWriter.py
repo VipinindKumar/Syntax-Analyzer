@@ -11,7 +11,14 @@ class VMWriter:
         """ Writes a VM push command
             segment: CONST, ARG, LOCAL, STATIC, THIS, THAT, POINTER, TEMP """
         
+        if segment == 'CONST':
+            segment = 'constant'
+        elif segment == 'ARG':
+            segment = 'argument'
+        else:
+            segment = segment.lower()
         
+        self.out.write('push ' + segment + ' ' + index)
     
     def writePop(self, segment, index):
         """ Writes a VM pop command
