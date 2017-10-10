@@ -24,7 +24,14 @@ class VMWriter:
         """ Writes a VM pop command
             segment: CONST, ARG, LOCAL, STATIC, THIS, THAT, POINTER, TEMP """
         
+        if segment == 'CONST':
+            segment = 'constant'
+        elif segment == 'ARG':
+            segment = 'argument'
+        else:
+            segment = segment.lower()
         
+        self.out.write('pop ' + segment + ' ' + index)
     
     def writeArithmetic(self, command):
         """ Writes an Arithmetic command
