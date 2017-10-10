@@ -112,7 +112,7 @@ class CompilationEngine:
             self.currentTokenType = 'identifierUse'
         
         # x, int, VAR, 0
-        self.currentToken = name + ', ' + self.symbolTable.typeOf(name) + ', ' + self.symbolTable.kindOf(name) + ', ' + self.symbolTable.indexOf(name)
+        self.currentToken = name + ' - (' + self.symbolTable.typeOf(name) + ', ' + self.symbolTable.kindOf(name) + ', ' + self.symbolTable.indexOf(name) + ')'
         
         self.__printTag()
     
