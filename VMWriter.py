@@ -37,7 +37,7 @@ class VMWriter:
         """ Writes an Arithmetic command
             command: ADD, SUB, NEG, EQ, GT, LT, AND, OR, NOT """
         
-        
+        self.out.write(command.lower())
     
     def writeLabel(self, label):
         """ Writes a VM label command """
