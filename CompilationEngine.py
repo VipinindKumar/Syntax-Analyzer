@@ -22,7 +22,7 @@ class CompilationEngine:
         self.symbolTable = SymbolTable.SymbolTable()
         
         # Create an object of VMWriter
-        self.vmWriter = VMWriter.VMWriter(outFile)
+        self.vmWriter = VMWriter.VMWriter(outFile[:-3] + 'vm')
         
         # Open a output file to write to
         self.out = open(outFile, 'w')
