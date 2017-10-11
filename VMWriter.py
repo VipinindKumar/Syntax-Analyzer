@@ -18,7 +18,7 @@ class VMWriter:
         else:
             segment = segment.lower()
         
-        self.out.write('push ' + segment + ' ' + index)
+        self.out.write('push ' + segment + ' ' + str(index))
     
     def writePop(self, segment, index):
         """ Writes a VM pop command
@@ -31,7 +31,7 @@ class VMWriter:
         else:
             segment = segment.lower()
         
-        self.out.write('pop ' + segment + ' ' + index)
+        self.out.write('pop ' + segment + ' ' + str(index))
     
     def writeArithmetic(self, command):
         """ Writes an Arithmetic command
