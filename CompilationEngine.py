@@ -378,7 +378,7 @@ class CompilationEngine:
         # subroutineName | (className | varName)
         if self.symbolTable.kindOf(self.currentToken) != 'NONE':
             # Save the name of the class variable is refering to
-            className = self.symoblTable.typeOf(self.currentToken)
+            className = self.symbolTable.typeOf(self.currentToken)
             
             self.__printIdentifier(self.currentToken)
         else:
