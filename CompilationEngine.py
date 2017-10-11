@@ -547,7 +547,7 @@ class CompilationEngine:
             self.__eat(self.op)
             self.compileTerm()
             
-            #!!! Write code for handling different operations
+            # Write code for handling different operations
             # op = ['+', '-', '*', '/', '&', '|', '<', '>', '=']
             if op == '+':
                 self.vmWriter.writeArithmetic('ADD')
@@ -584,8 +584,15 @@ class CompilationEngine:
         self.tabs += 1
         self.out.write('<term>\n')
         
-        # integerConstant | StringConstant | keywordConstant
-        if self.currentTokenType in ['integerConstant', 'stringConstant'] or self.currentToken in self.keywordConstant:
+        # integerConstant 
+        if self.currentTokenType == 'integerConstant':
+            # Push the integer constant
+            self.vmWriter.writePush('CONST', int(self.currentToken))
+            
+            self.__printTag()
+        
+        # StringConstant | keywordConstant
+        elif self.currentTokenType == 'stringConstant' or self.currentToken in self.keywordConstant:
             self.__printTag()
         
         # unaryOp term
