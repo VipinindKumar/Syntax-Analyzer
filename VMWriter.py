@@ -18,7 +18,7 @@ class VMWriter:
         else:
             segment = segment.lower()
         
-        self.out.write('push ' + segment + ' ' + str(index))
+        self.out.write('push ' + segment + ' ' + str(index) + '\n')
     
     def writePop(self, segment, index):
         """ Writes a VM pop command
@@ -31,43 +31,43 @@ class VMWriter:
         else:
             segment = segment.lower()
         
-        self.out.write('pop ' + segment + ' ' + str(index))
+        self.out.write('pop ' + segment + ' ' + str(index) + '\n')
     
     def writeArithmetic(self, command):
         """ Writes an Arithmetic command
             command: ADD, SUB, NEG, EQ, GT, LT, AND, OR, NOT """
         
-        self.out.write(command.lower())
+        self.out.write(command.lower() + '\n')
     
     def writeLabel(self, label):
         """ Writes a VM label command """
         
-        self.out.write('(' + label.upper() + ')')
+        self.out.write('(' + label.upper() + ')' + '\n')
     
     def writeGoto(self, label):
         """ Writes a VM goto command """
         
-        self.out.write('goto ' + label.upper())
+        self.out.write('goto ' + label.upper() + '\n')
     
     def writeIf(self, label):
         """ Writes a VM If-goto command """
         
-        self.out.write('if-goto ' + label.upper())
+        self.out.write('if-goto ' + label.upper() + '\n')
     
     def writeCall(self, name , nArgs):
         """ Writes a VM call command """
         
-        self.out.write('call ' + name + ' ' + str(nArgs))
+        self.out.write('call ' + name + ' ' + str(nArgs) + '\n')
     
     def writeFunction(self, name, nLocals):
         """ Writes a VM function command """
         
-        self.out.write('function ' + name + ' ' + str(nLocals))
+        self.out.write('function ' + name + ' ' + str(nLocals) + '\n')
     
     def writeReturn(self):
         """ Writes a VM return command """
         
-        self.out.write('return')
+        self.out.write('return' + '\n')
     
     def close(self):
         """ Close the file """
