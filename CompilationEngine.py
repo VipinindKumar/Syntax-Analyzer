@@ -490,6 +490,9 @@ class CompilationEngine:
         
         self.__eat([';'])
         
+        # Write Return VM command
+        self.vmWriter.writeReturn()
+        
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</returnStatement>\n')
