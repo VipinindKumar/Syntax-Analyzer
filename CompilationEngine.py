@@ -541,8 +541,34 @@ class CompilationEngine:
         self.compileTerm()
         
         while self.currentToken in self.op:
+            # Push the operation after compiling both expressions
+            op = self.currentToken
+            
             self.__eat(self.op)
             self.compileTerm()
+            
+            #!!! Write code for handling different operations
+            # op = ['+', '-', '*', '/', '&', '|', '<', '>', '=']
+            if op == '+':
+                self.vmWriter.writeArithmetic('ADD')
+            elif op == '-':
+                self.vmWriter.writeArithmetic('SUB')
+            elif op == '*':
+                self.vmWriter.writeCall('Math.multiply', '2')
+            elif op == '/':
+                self.vmWriter.writeCall('Math.divide', '2')
+            elif op == '&':
+                self.vmWriter.writeArithmetic('AND')
+            elif op == '|':
+                self.vmWriter.writeArithmetic('OR')
+            elif op == '<':
+                self.vmWriter.writeArithmetic('LT')
+            elif op == '>':
+                self.vmWriter.writeArithmetic('GT')
+            elif op == '=':
+                self.vmWriter.writeArithmetic('EQ')
+            else:
+                raise ValueError('Wrong operation is used')
         
         self.tabs -= 1
         self.__printTabs()
