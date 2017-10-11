@@ -554,9 +554,9 @@ class CompilationEngine:
             elif op == '-':
                 self.vmWriter.writeArithmetic('SUB')
             elif op == '*':
-                self.vmWriter.writeCall('Math.multiply', '2')
+                self.vmWriter.writeCall('Math.multiply', 2)
             elif op == '/':
-                self.vmWriter.writeCall('Math.divide', '2')
+                self.vmWriter.writeCall('Math.divide', 2)
             elif op == '&':
                 self.vmWriter.writeArithmetic('AND')
             elif op == '|':
