@@ -368,7 +368,7 @@ class CompilationEngine:
         self.__printTabs()
         self.out.write('</statements>\n')
     
-    def __subroutineCall(self):
+    def __subroutineCall(self, state=''):
         """ Compiles the subroutine call part of the program
             SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.' 
                             subroutineName '(' expressionList ')' """
@@ -405,6 +405,10 @@ class CompilationEngine:
             name = className + '.' + name
         # Write call vm command
         self.vmWriter.writeCall(name, nArgs)
+        
+        # Dump the returned value residing at the top of stack, in case of a 'do' statement
+        if state == 'DO':
+            self.vmWriter.writePop('TEMP', 0)
     
     def compileDo(self):
         """ Compiles a do statement 
@@ -417,7 +421,7 @@ class CompilationEngine:
         self.__eat(['do'])
         
         # subrutineCall
-        self.__subroutineCall()
+        self.__subroutineCall('DO')
         
         self.__eat([';']) # ';'
         
@@ -487,11 +491,19 @@ class CompilationEngine:
         
         if self.currentToken != ';':
             self.compileExpression()
+            
+            # Write Return VM command
+            self.vmWriter.writeReturn()
+        else:
+            # if there is no expression to return, push a dummy value to the stack
+            self.vmWriter.writePush('CONST', 0)
+            
+            # Write Return VM command
+            self.vmWriter.writeReturn()
         
         self.__eat([';'])
         
-        # Write Return VM command
-        self.vmWriter.writeReturn()
+        #!!! add a dump value before returning
         
         self.tabs -= 1
         self.__printTabs()
