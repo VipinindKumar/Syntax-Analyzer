@@ -30,6 +30,7 @@ class CompilationEngine:
         self.currentToken = ''
         self.currentTokenType = ''
         self.tabs = 0
+        self.i = 0 # for creating unique labels
         
         self.__advance()
     
@@ -478,12 +479,27 @@ class CompilationEngine:
         self.__eat(['while'])
         self.__eat(['('])
         
+        # write a Label before compiling the expression 'L0'
+        self.vmWriter.writeLabel('L' + str(self.i))
+        self.i += 1
+        
         self.compileExpression()
+        
+        # negate the expression above, and if true jump to the label at the end 'L1'
+        self.vmWriter.writeArithmetic('NOT')
+        self.vmWriter.writeIf('L' + str(self.i))
+        self.i += 1
         
         self.__eat([')'])
         self.__eat(['{'])
         
         self.compileStatements()
+        
+        # after compiled statements create a goto statement to the expression at the start 'L0'
+        self.vmWriter.writeGoto('L' + str(self.i - 2))
+        
+        # write the label for the end 'L1'
+        self.vmWriter.writeLabel('L' + str(self.i - 1))
         
         self.__eat(['}'])
         
@@ -615,9 +631,19 @@ class CompilationEngine:
             
             self.__printTag()
         
-        # StringConstant | keywordConstant
-        elif self.currentTokenType == 'stringConstant' or self.currentToken in self.keywordConstant:
+        # StringConstant
+        elif self.currentTokenType == 'stringConstant':
             self.__printTag()
+        
+        # keywordConstant
+        elif self.currentToken in self.keywordConstant:
+            if self.currentToken in ['null', 'false']:
+                self.vmWriter.writePush('CONST', 0)
+            elif self.currentToken == 'true':
+                self.vmWriter.writePush('CONST', 1)
+                self.vmWriter.writeArithmetic('NEG')
+            elif self.currentToken == 'this':
+                pass
         
         # unaryOp term
         elif self.currentToken in self.unaryOp:
