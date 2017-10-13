@@ -376,11 +376,13 @@ class CompilationEngine:
         className = ''
         name = ''
         # subroutineName | (className | varName)
+        # if varName
         if self.symbolTable.kindOf(self.currentToken) != 'NONE':
             # Save the name of the class variable is refering to
             className = self.symbolTable.typeOf(self.currentToken)
             
             self.__printIdentifier(self.currentToken)
+        # if className or subroutineName
         else:
             name = self.currentToken
             self.__printTag()
@@ -403,6 +405,9 @@ class CompilationEngine:
         # build the name of the function to call, if className.name(expressionList)
         if className:
             name = className + '.' + name
+        # else add the current className in front of the subroutineName
+        else:
+            name = self.className + '.' + name
         # Write call vm command
         self.vmWriter.writeCall(name, nArgs)
         
