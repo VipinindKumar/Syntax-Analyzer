@@ -659,6 +659,10 @@ class CompilationEngine:
             elif self.currentToken == '.': # (className | varName) '.' subroutineName '(' expressionList ')'
                 self.__eat(['.'])
                 
+                if self.symbolTable.kindOf(self.currentToken) != 'NONE':
+                    # Save the name of the class variable is refering to
+                    name = self.symbolTable.typeOf(name)
+                
                 # Create the full call subroutine name with its className append at front
                 name = name + '.' + self.currentToken
                 
