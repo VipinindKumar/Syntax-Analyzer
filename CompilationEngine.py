@@ -635,9 +635,12 @@ class CompilationEngine:
             # subroutineCall: subroutineName '(' expressionList ')' |
             #                (className | varName) '.' subroutineName '(' expressionList ')'
             
-            # varName | subroutineName | className
+            name = self.currentToken
+            
+            # varName
             if self.symbolTable.kindOf(self.currentToken) != 'NONE':
                 self.__printIdentifier(self.currentToken)
+            # subroutineName | className
             else:
                 self.__printTag()
             
@@ -648,14 +651,24 @@ class CompilationEngine:
             
             elif self.currentToken == '(': # subroutineName '(' expressionList ')'
                 self.__eat(['('])
-                self.compileExpressionList()
+                nArgs = self.compileExpressionList()
+                # call the subroutine
+                self.vmWriter.writeCall(self.className + '.' + name, nArgs)
                 self.__eat([')'])
             
             elif self.currentToken == '.': # (className | varName) '.' subroutineName '(' expressionList ')'
                 self.__eat(['.'])
+                
+                # Create the full call subroutine name with its className append at front
+                name = name + '.' + self.currentToken
+                
                 self.__printTag()
                 self.__eat(['('])
-                self.compileExpressionList()
+                nArgs = self.compileExpressionList()
+                
+                # add call command after pushing all the parameters to stack
+                self.vmWriter.writeCall(name, nArgs)
+                
                 self.__eat([')'])
         
         self.tabs -= 1
