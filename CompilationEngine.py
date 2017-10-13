@@ -638,7 +638,10 @@ class CompilationEngine:
             name = self.currentToken
             
             # varName
-            if self.symbolTable.kindOf(self.currentToken) != 'NONE':
+            if (kind = self.symbolTable.kindOf(self.currentToken)) != 'NONE':
+                # push the variable value on to the stack
+                self.vmWriter.writePush(kind, self.symbolTable.indexOf(self.currentToken))
+                
                 self.__printIdentifier(self.currentToken)
             # subroutineName | className
             else:

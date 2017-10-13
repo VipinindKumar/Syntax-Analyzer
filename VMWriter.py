@@ -15,6 +15,8 @@ class VMWriter:
             segment = 'constant'
         elif segment == 'ARG':
             segment = 'argument'
+        elif segment == 'VAR':
+            segment = 'local'
         else:
             segment = segment.lower()
         
