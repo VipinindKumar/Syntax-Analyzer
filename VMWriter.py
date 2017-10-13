@@ -22,12 +22,14 @@ class VMWriter:
     
     def writePop(self, segment, index):
         """ Writes a VM pop command
-            segment: CONST, ARG, LOCAL, STATIC, THIS, THAT, POINTER, TEMP """
+            segment: CONST, ARG, VAR, STATIC, THIS, THAT, POINTER, TEMP """
         
         if segment == 'CONST':
             segment = 'constant'
         elif segment == 'ARG':
             segment = 'argument'
+        elif segment == 'VAR':
+            segment = 'local'
         else:
             segment = segment.lower()
         

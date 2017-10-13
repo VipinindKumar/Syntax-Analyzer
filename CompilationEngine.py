@@ -443,8 +443,12 @@ class CompilationEngine:
         self.tabs += 1
         
         self.__eat(['let'])
+        
+        # store the varialbe
+        variable = self.currentToken
         self.__printTag()
         
+        # if it's an array
         if self.currentToken == '[':
             self.__eat(['['])
             self.compileExpression()
@@ -453,6 +457,9 @@ class CompilationEngine:
         self.__eat(['='])
         
         self.compileExpression()
+        
+        # after compiling expression value, pop the value into the variable
+        self.vmWriter.writePop(self.symbolTable.kindOf(variable), self.symbolTable.indexOf(variable))
         
         self.__eat([';'])
         
