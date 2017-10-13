@@ -301,7 +301,7 @@ class CompilationEngine:
             self.symbolTable.define(name, vartype, 'ARG')
             
             # self.__printTag() # varName identifier
-            self.__printIdentifier('DEC', name)
+            self.__printIdentifier(name, 'DEC')
             
             while self.currentToken != ')':
                 self.__eat([','])
