@@ -642,13 +642,21 @@ class CompilationEngine:
             elif self.currentToken == 'true':
                 self.vmWriter.writePush('CONST', 1)
                 self.vmWriter.writeArithmetic('NEG')
-            elif self.currentToken == 'this':
+            else: # 'this'
                 pass
         
         # unaryOp term
         elif self.currentToken in self.unaryOp:
+            unaryOp = self.currentToken
+            
             self.__eat(self.unaryOp)
             self.compileTerm()
+            
+            # Push the unary operation, after compiling the term
+            if unaryOp == '-':
+                self.vmWriter.writeArithmetic('NEG')
+            else:
+                self.vmWriter.writeArithmetic('NOT') # '~'
         
         # '(' expression ')'
         elif self.currentToken == '(':
@@ -664,7 +672,8 @@ class CompilationEngine:
             name = self.currentToken
             
             # varName
-            if (kind = self.symbolTable.kindOf(self.currentToken)) != 'NONE':
+            kind = self.symbolTable.kindOf(self.currentToken)
+            if kind != 'NONE':
                 # push the variable value on to the stack
                 self.vmWriter.writePush(kind, self.symbolTable.indexOf(self.currentToken))
                 
