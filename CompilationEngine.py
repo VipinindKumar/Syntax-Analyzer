@@ -653,10 +653,13 @@ class CompilationEngine:
         elif self.currentToken in self.keywordConstant:
             if self.currentToken in ['null', 'false']:
                 self.vmWriter.writePush('CONST', 0)
+                self.__printTag()
             elif self.currentToken == 'true':
                 self.vmWriter.writePush('CONST', 1)
                 self.vmWriter.writeArithmetic('NEG')
+                self.__printTag()
             else:  # 'this'
+                self.__printTag()
                 pass
 
         # unaryOp term
