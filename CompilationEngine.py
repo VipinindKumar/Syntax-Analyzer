@@ -479,14 +479,16 @@ class CompilationEngine:
         self.__eat(['('])
 
         # write a Label before compiling the expression 'L0'
-        self.vmWriter.writeLabel('L' + str(self.i))
+        L0 = 'L' + str(self.i)
+        self.vmWriter.writeLabel(L0)
         self.i += 1
 
         self.compileExpression()
 
         # negate the expression above, and if true jump to the label at the end 'L1'
         self.vmWriter.writeArithmetic('NOT')
-        self.vmWriter.writeIf('L' + str(self.i))
+        L1 = 'L' + str(self.i)
+        self.vmWriter.writeIf(L1)
         self.i += 1
 
         self.__eat([')'])
@@ -495,10 +497,10 @@ class CompilationEngine:
         self.compileStatements()
 
         # after compiled statements create a goto statement to the expression at the start 'L0'
-        self.vmWriter.writeGoto('L' + str(self.i - 2))
+        self.vmWriter.writeGoto(L0)
 
         # write the label for the end 'L1'
-        self.vmWriter.writeLabel('L' + str(self.i - 1))
+        self.vmWriter.writeLabel(L1)
 
         self.__eat(['}'])
 
@@ -552,7 +554,8 @@ class CompilationEngine:
 
         # negate the expression and then write an if-goto statement 'L0' to the else statements
         self.vmWriter.writeArithmetic('NOT')
-        self.vmWriter.writeIf('L' + str(self.i))
+        L0 = 'L' + str(self.i)
+        self.vmWriter.writeIf(L0)
         self.i += 1
 
         self.__eat([')'])
@@ -561,13 +564,14 @@ class CompilationEngine:
         self.compileStatements()
 
         # after compiling statements, write a goto statement to 'L1' the end of conditional
-        self.vmWriter.writeGoto('L' + str(self.i))
+        L1 = 'L' + str(self.i)
+        self.vmWriter.writeGoto(L1)
         self.i += 1
 
         self.__eat(['}'])
 
         # Add the label to represent end of if and start of else is any 'L0'
-        self.vmWriter.writeLabel('L' + str(self.i - 2))
+        self.vmWriter.writeLabel(L0)
 
         if self.currentToken == 'else':
             self.__eat(['else'])
@@ -578,7 +582,7 @@ class CompilationEngine:
             self.__eat(['}'])
 
         # Add a label to represent end of the whole if-else consitional 'L1'
-        self.vmWriter.writeLabel('L' + str(self.i - 1))
+        self.vmWriter.writeLabel(L1)
 
         self.tabs -= 1
         self.__printTabs()
