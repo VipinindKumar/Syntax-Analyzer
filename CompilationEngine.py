@@ -317,7 +317,7 @@ class CompilationEngine:
                 self.symbolTable.define(name, vartype, 'ARG')
 
                 # self.__printTag() # varName identifier
-                self.__printIdentifier('DEC', name)
+                self.__printIdentifier(name, 'DEC')
 
         self.tabs -= 1  # remove indentation
         self.__printTabs()
