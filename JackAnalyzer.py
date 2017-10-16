@@ -1,9 +1,19 @@
 import CompilationEngine
 import sys
+import os
 
 """Main file to run the JackAnalyzer
     by using JackTokenizer and CompilationEngine"""
     
 if __name__ == '__main__':
-    compiler = CompilationEngine.CompilationEngine(sys.argv[1], sys.argv[1][-4] + 'xml')
-    compiler.compileClass()
+    # if it's a file, then create the CompilationEngine object and compile the whole class
+    if os.path.isfile(sys.argv[1]):
+        compiler = CompilationEngine.CompilationEngine(sys.argv[1], sys.argv[1][-4] + 'xml')
+        compiler.compileClass()
+    # else if it's a directory, then cycle through all the files ending in .jack to compile all classes
+    else:
+        for folder, subFolders, files in os.walk(sys.argv[1]):
+            for file in files:
+                if file.endswith('.jack'):
+                    compiler = CompilationEngine.CompilationEngine(file, file[-4] + 'xml')
+                    compiler.compileClass()
