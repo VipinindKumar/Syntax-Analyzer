@@ -127,26 +127,30 @@ class CompilationEngine:
         """ Compilea part of class variable declaration and
             variable declaration
             : type varName (',' varName)* ';' """
-
+        
         # Store the type of variable
         vartype = self.currentToken
-
+        
+        # number of variable declaration
+        nvar = 0
+        
         # type: int | char | boolean | className
         # can just use self.__printTag()
         try:
             self.__eat(['int', 'char', 'boolean'])
         except:
             self.__printTag()
-
+        
         # Store the name of the variable
         name = self.currentToken
-
+        
         # Store the complete variable definition in the symbolTable
         self.symbolTable.define(name, vartype, kind.upper())
-
+        nvar += 1
+        
         # self.__printTag() # varName identifier
         self.__printIdentifier(name, 'DEC')
-
+        
         # (',' varName)*
         while self.currentToken != ';':
             self.__eat([','])
@@ -154,11 +158,14 @@ class CompilationEngine:
             name = self.currentToken
             # Store the complete variable definition in the symbolTable
             self.symbolTable.define(name, vartype, kind.upper())
-
+            nvar += 1
+            
             # self.__printTag() # varName identifier
             self.__printIdentifier(name, 'DEC')
-
+        
         self.__eat([';'])  # ';'
+        
+        return nvar
 
     def compileClass(self):
         """ Compiles a complete class
@@ -204,7 +211,7 @@ class CompilationEngine:
 
         self.__eat(['static', 'field'])  # (static | field)
 
-        self.__varDec(kind)  # type varName (',' varName)* ';'
+        nvar = self.__varDec(kind)  # type varName (',' varName)* ';'
 
         # Remove single indentation from the tags
         self.tabs -= 1
@@ -260,8 +267,7 @@ class CompilationEngine:
         nLocals = 0
         # (varDec)*
         while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
-            self.compileVarDec()
-            nLocals += 1
+            nLocals += self.compileVarDec()
 
         self.vmWriter.writeFunction(self.className + '.' + subroutineName, nLocals)
 
@@ -326,19 +332,21 @@ class CompilationEngine:
     def compileVarDec(self):
         """ compiles a variable declaration
             varDec: var type varName (',' varName)* ';' """
-
+        
         self.__printTabs()
         self.out.write('<varDec>\n')
         self.tabs += 1  # increase indentation
-
+        
         self.__eat(['var'])  # var
-
-        self.__varDec('VAR')  # type varName (',' varName)* ';'
-
+        
+        nLocals = self.__varDec('VAR')  # type varName (',' varName)* ';'
+        
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</varDec>\n')
+        
+        return nLocals
 
     def compileStatements(self):
         """ Compiles series of statements, without {}
