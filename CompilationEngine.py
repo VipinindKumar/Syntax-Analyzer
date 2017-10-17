@@ -129,30 +129,30 @@ class CompilationEngine:
         """ Compilea part of class variable declaration and
             variable declaration
             : type varName (',' varName)* ';' """
-        
+
         # Store the type of variable
         vartype = self.currentToken
-        
+
         # number of variable declaration
         nvar = 0
-        
+
         # type: int | char | boolean | className
         # can just use self.__printTag()
         try:
             self.__eat(['int', 'char', 'boolean'])
         except:
             self.__printTag()
-        
+
         # Store the name of the variable
         name = self.currentToken
-        
+
         # Store the complete variable definition in the symbolTable
         self.symbolTable.define(name, vartype, kind.upper())
         nvar += 1
-        
+
         # self.__printTag() # varName identifier
         self.__printIdentifier(name, 'DEC')
-        
+
         # (',' varName)*
         while self.currentToken != ';':
             self.__eat([','])
@@ -161,39 +161,39 @@ class CompilationEngine:
             # Store the complete variable definition in the symbolTable
             self.symbolTable.define(name, vartype, kind.upper())
             nvar += 1
-            
+
             # self.__printTag() # varName identifier
             self.__printIdentifier(name, 'DEC')
-        
+
         self.__eat([';'])  # ';'
-        
+
         return nvar
 
     def compileClass(self):
         """ Compiles a complete class
             Class: 'class' className '{' classVarDec* subroutineDec* '}' """
-        
+
         self.__printTabs()
         self.out.write('<class>\n')  # Start <class> tag in output
         self.tabs += 1  # Add single Indentation to xml file tags from here
-        
+
         self.__eat(['class'])  # check that there is class keyword as next token and output the fact
-        
+
         self.className = self.currentToken  # Saves the name of the current class
-        
+
         self.__printTag()  # Handles className identifier
         self.__eat(['{'])  # '{'
-        
+
         # 0 or more class variable declarations
         while self.currentToken not in ['constructor', 'method', 'function']:
             self.compileClassVarDec()
-        
+
         # 0 or more subroutines
         while self.currentToken != '}':
             self.compileSubroutine()
-        
+
         self.__eat(['}'])  # '}'
-        
+
         self.tabs -= 1  # Remove single indentation from the tags
         self.__printTabs()
         self.out.write('</class>\n')
@@ -202,25 +202,25 @@ class CompilationEngine:
     def compileClassVarDec(self):
         """ Compiles a static or a field declaration
             ClassVarDec: ('static' | 'field') type varName (',' varName)* ';' """
-        
+
         self.__printTabs()
         self.out.write('<classVarDec>\n')
-        
+
         self.tabs += 1  # increase indentation
-        
+
         # Store the kind of variable being declared
         kind = self.currentToken
-        
+
         self.__eat(['static', 'field'])  # (static | field)
-        
+
         if kind == 'static':
             self.nstatic += self.__varDec(kind)  # type varName (',' varName)* ';'
         else:
             self.nfield += self.__varDec(kind)  # type varName (',' varName)* ';'
-        
+
         # Remove single indentation from the tags
         self.tabs -= 1
-        
+
         self.__printTabs()
         self.out.write('</classVarDec>\n')
 
@@ -229,53 +229,53 @@ class CompilationEngine:
             Subroutine: ('constructor' | 'method' | 'function')
                         ('void' | type) subroutineName '(' parameterList ')'
                         subroutineBody """
-        
+
         self.__printTabs()
         self.out.write('<subroutineDec>\n')
         self.tabs += 1  # increase indentation
-        
+
         # Start the subroutine variable declarations
         self.symbolTable.startSubroutine()
-        
+
         # store the type of subroutine
         subroutine = self.currentToken
-        
+
         self.__eat(['constructor', 'function', 'method'])  # constructor | function | method
-        
+
         # void | type: int | char | boolean | className
         # can just use self.__printTag()
         try:
             self.__eat(['void', 'int', 'char', 'boolean'])
         except:
             self.__printTag()
-        
+
         subroutineName = self.currentToken
-        
+
         self.__printTag()  # subroutineName identifier
-        
+
         self.__eat(['('])  # '('
-        
+
         self.compileParameterList()
-        
+
         self.__eat([')'])  # ')'
-        
+
         # subroutineBody
         # subroutineBody: '{' (varDec)* statements '}'
-        
+
         self.__printTabs()
         self.out.write('<subroutineBody>\n')
         self.tabs += 1  # increase indentation
-        
+
         self.__eat(['{'])
-        
+
         nLocals = 0
         # (varDec)*
         while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
             nLocals += self.compileVarDec()
-        
+
         # write the function statement
         self.vmWriter.writeFunction(self.className + '.' + subroutineName, nLocals)
-        
+
         # Add 'this' as 'argument 0' in symbolTable in case of a method
         if subroutine == 'method':
             self.symbolTable.define('this', self.className, 'ARG')
@@ -283,19 +283,19 @@ class CompilationEngine:
             # push the number of parameters to stack and allocate the memory
             self.vmWriter.writePush('CONST', self.nfield)
             self.vmWriter.writeCall('Memory.alloc', 1)
-            
+
             # and pop it in 'THIS' by pointer 0
             self.vmWriter.writePop('POINTER', 0)
-        
+
         # statements
         self.compileStatements()
-        
+
         self.__eat(['}'])
-        
+
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</subroutineBody>\n')
-        
+
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
@@ -304,27 +304,27 @@ class CompilationEngine:
     def compileParameterList(self):
         """ Compiles a parameter list(possibly empty) not including the enclosing ()
             ParameterList: ((type varName) (',' type varName)*)? """
-        
+
         self.__printTabs()
         self.out.write('<parameterList>\n')
         self.tabs += 1  # add indentation
-        
+
         if self.currentToken != ')':
-            
+
             # type: int | char | boolean | className
             vartype = self.currentToken
             try:
                 self.__eat(['int', 'char', 'boolean'])
             except:
                 self.__printTag()
-            
+
             name = self.currentToken
             # add the vaariable into the symbolTable
             self.symbolTable.define(name, vartype, 'ARG')
-            
+
             # self.__printTag() # varName identifier
             self.__printIdentifier(name, 'DEC')
-            
+
             while self.currentToken != ')':
                 self.__eat([','])
                 # type: int | char | boolean | className
@@ -333,14 +333,14 @@ class CompilationEngine:
                     self.__eat(['int', 'char', 'boolean'])
                 except:
                     self.__printTag()
-                
+
                 name = self.currentToken
                 # add the vaariable into the symbolTable
                 self.symbolTable.define(name, vartype, 'ARG')
-                
+
                 # self.__printTag() # varName identifier
                 self.__printIdentifier(name, 'DEC')
-        
+
         self.tabs -= 1  # remove indentation
         self.__printTabs()
         self.out.write('</parameterList>\n')
@@ -348,20 +348,20 @@ class CompilationEngine:
     def compileVarDec(self):
         """ compiles a variable declaration
             varDec: var type varName (',' varName)* ';' """
-        
+
         self.__printTabs()
         self.out.write('<varDec>\n')
         self.tabs += 1  # increase indentation
-        
+
         self.__eat(['var'])  # var
-        
+
         nLocals = self.__varDec('VAR')  # type varName (',' varName)* ';'
-        
+
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</varDec>\n')
-        
+
         return nLocals
 
     def compileStatements(self):
@@ -687,8 +687,8 @@ class CompilationEngine:
                 self.vmWriter.writeArithmetic('NEG')
                 self.__printTag()
             else:  # 'this'
+                self.vmWriter.writePush('POINTER', 0)
                 self.__printTag()
-                pass
 
         # unaryOp term
         elif self.currentToken in self.unaryOp:
