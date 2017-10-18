@@ -397,7 +397,7 @@ class CompilationEngine:
         self.__printTabs()
         self.out.write('</statements>\n')
 
-    def __subroutineCall(self, state=''):
+    def __subroutineCall(self):
         """ Compiles the subroutine call part of the program
             SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.'
                             subroutineName '(' expressionList ')' """
@@ -448,12 +448,12 @@ class CompilationEngine:
         # if calling a method add one to the nArgs
         if method:
             nArgs += 1
+        
         # Write call vm command
         self.vmWriter.writeCall(name, nArgs)
 
         # Dump the returned value residing at the top of stack, in case of a 'do' statement
-        if state == 'DO':
-            self.vmWriter.writePop('TEMP', 0)
+        self.vmWriter.writePop('TEMP', 0)
 
     def compileDo(self):
         """ Compiles a do statement
