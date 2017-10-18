@@ -466,7 +466,7 @@ class CompilationEngine:
         self.__eat(['do'])
 
         # subrutineCall
-        self.__subroutineCall('DO')
+        self.__subroutineCall()
 
         self.__eat([';'])  # ';'
 
