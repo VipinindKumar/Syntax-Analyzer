@@ -406,10 +406,13 @@ class CompilationEngine:
         name = ''
         # subroutineName | (className | varName)
         # if varName
+        method = False
         varkind = self.symbolTable.kindOf(self.currentToken)
         if varkind != 'NONE':
             # push the variable on the stack before the call command
             self.vmWriter.writePush(varkind, self.symbolTable.indexOf(self.currentToken))
+            
+            method = True
             
             # Save the name of the class variable is refering to
             className = self.symbolTable.typeOf(self.currentToken)
@@ -441,6 +444,10 @@ class CompilationEngine:
         # else add the current className in front of the subroutineName
         else:
             name = self.className + '.' + name
+        
+        # if calling a method add one to the nArgs
+        if method:
+            nArgs += 1
         # Write call vm command
         self.vmWriter.writeCall(name, nArgs)
 
