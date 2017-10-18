@@ -396,27 +396,31 @@ class CompilationEngine:
         """ Compiles the subroutine call part of the program
             SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.'
                             subroutineName '(' expressionList ')' """
-
+        
         className = ''
         name = ''
         # subroutineName | (className | varName)
         # if varName
-        if self.symbolTable.kindOf(self.currentToken) != 'NONE':
+        varkind = self.symbolTable.kindOf(self.currentToken)
+        if varkind != 'NONE':
+            # push the variable on the stack before the call command
+            self.vmWriter.writePush(varkind, self.symbolTable.indexOf(self.currentToken))
+            
             # Save the name of the class variable is refering to
             className = self.symbolTable.typeOf(self.currentToken)
-
+            
             self.__printIdentifier(self.currentToken)
         # if className or subroutineName
         else:
             name = self.currentToken
             self.__printTag()
-
+        
         if self.currentToken == '.':
             # in the case of '.', it should be className.name(expressionList)
             # set className to name, only run if it's a class
             if name:
                 className = name
-
+        
             self.__eat(['.'])
 
             name = self.currentToken
@@ -741,11 +745,15 @@ class CompilationEngine:
 
             elif self.currentToken == '.':  # (className | varName) '.' subroutineName '(' expressionList ')'
                 self.__eat(['.'])
-
-                if self.symbolTable.kindOf(self.currentToken) != 'NONE':
+                
+                varkind = self.symbolTable.kindOf(self.currentToken)
+                if varkind != 'NONE':
+                    # push the variable on the stack before the call command
+                    self.vmWriter.writePush(varkind, self.symbolTable.indexOf(self.currentToken))
+                    
                     # Save the name of the class variable is refering to
                     name = self.symbolTable.typeOf(name)
-
+                    
                 # Create the full call subroutine name with its className append at front
                 name = name + '.' + self.currentToken
 
