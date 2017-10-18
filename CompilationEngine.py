@@ -229,73 +229,78 @@ class CompilationEngine:
             Subroutine: ('constructor' | 'method' | 'function')
                         ('void' | type) subroutineName '(' parameterList ')'
                         subroutineBody """
-
+        
         self.__printTabs()
         self.out.write('<subroutineDec>\n')
         self.tabs += 1  # increase indentation
-
+        
         # Start the subroutine variable declarations
         self.symbolTable.startSubroutine()
-
+        
         # store the type of subroutine
         subroutine = self.currentToken
-
+        
         self.__eat(['constructor', 'function', 'method'])  # constructor | function | method
-
+        
         # void | type: int | char | boolean | className
         # can just use self.__printTag()
         try:
             self.__eat(['void', 'int', 'char', 'boolean'])
         except:
             self.__printTag()
-
+        
         subroutineName = self.currentToken
-
+        
         self.__printTag()  # subroutineName identifier
-
+        
         self.__eat(['('])  # '('
-
+        
         self.compileParameterList()
-
+        
         self.__eat([')'])  # ')'
-
+        
         # subroutineBody
         # subroutineBody: '{' (varDec)* statements '}'
-
+        
         self.__printTabs()
         self.out.write('<subroutineBody>\n')
         self.tabs += 1  # increase indentation
-
+        
         self.__eat(['{'])
-
+        
         nLocals = 0
         # (varDec)*
         while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
             nLocals += self.compileVarDec()
-
+        
         # write the function statement
         self.vmWriter.writeFunction(self.className + '.' + subroutineName, nLocals)
-
+        
         # Add 'this' as 'argument 0' in symbolTable in case of a method
         if subroutine == 'method':
             self.symbolTable.define('this', self.className, 'ARG')
+            
+            # push the argument 0 and then pop it in pointer 0
+            self.vmWriter.writePush('ARG', 0)
+            self.vmWriter.writePop('POINTER', 0)
+        
         elif subroutine == 'constructor':
             # push the number of parameters to stack and allocate the memory
             self.vmWriter.writePush('CONST', self.nfield)
             self.vmWriter.writeCall('Memory.alloc', 1)
-
+            
             # and pop it in 'THIS' by pointer 0
             self.vmWriter.writePop('POINTER', 0)
-
+        
         # statements
         self.compileStatements()
-
+        
         self.__eat(['}'])
-
+        
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</subroutineBody>\n')
-
+        
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
