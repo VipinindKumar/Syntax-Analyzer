@@ -229,78 +229,78 @@ class CompilationEngine:
             Subroutine: ('constructor' | 'method' | 'function')
                         ('void' | type) subroutineName '(' parameterList ')'
                         subroutineBody """
-        
+
         self.__printTabs()
         self.out.write('<subroutineDec>\n')
         self.tabs += 1  # increase indentation
-        
+
         # Start the subroutine variable declarations
         self.symbolTable.startSubroutine()
-        
+
         # store the type of subroutine
         subroutine = self.currentToken
-        
+
         self.__eat(['constructor', 'function', 'method'])  # constructor | function | method
-        
+
         # void | type: int | char | boolean | className
         # can just use self.__printTag()
         try:
             self.__eat(['void', 'int', 'char', 'boolean'])
         except:
             self.__printTag()
-        
+
         subroutineName = self.currentToken
-        
+
         self.__printTag()  # subroutineName identifier
-        
+
         self.__eat(['('])  # '('
-        
+
         self.compileParameterList()
-        
+
         self.__eat([')'])  # ')'
-        
+
         # subroutineBody
         # subroutineBody: '{' (varDec)* statements '}'
-        
+
         self.__printTabs()
         self.out.write('<subroutineBody>\n')
         self.tabs += 1  # increase indentation
-        
+
         self.__eat(['{'])
-        
+
         nLocals = 0
         # (varDec)*
         while self.currentToken not in ['let', 'if', 'do', 'while', 'return']:
             nLocals += self.compileVarDec()
-        
+
         # write the function statement
         self.vmWriter.writeFunction(self.className + '.' + subroutineName, nLocals)
-        
+
         # Add 'this' as 'argument 0' in symbolTable in case of a method
         if subroutine == 'method':
             self.symbolTable.define('this', self.className, 'ARG')
-            
+
             # push the argument 0 and then pop it in pointer 0
             self.vmWriter.writePush('ARG', 0)
             self.vmWriter.writePop('POINTER', 0)
-        
+
         elif subroutine == 'constructor':
             # push the number of parameters to stack and allocate the memory
             self.vmWriter.writePush('CONST', self.nfield)
             self.vmWriter.writeCall('Memory.alloc', 1)
-            
+
             # and pop it in 'THIS' by pointer 0
             self.vmWriter.writePop('POINTER', 0)
-        
+
         # statements
         self.compileStatements()
-        
+
         self.__eat(['}'])
-        
+
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</subroutineBody>\n')
-        
+
         # Remove single indentation from the tags
         self.tabs -= 1
         self.__printTabs()
@@ -401,38 +401,45 @@ class CompilationEngine:
         """ Compiles the subroutine call part of the program
             SubroutineCall: subroutineName '(' expressionList ')' | (className | varName) '.'
                             subroutineName '(' expressionList ')' """
-        
+
         className = ''
         name = ''
         # subroutineName | (className | varName)
         # if varName
         method = False
         varkind = self.symbolTable.kindOf(self.currentToken)
+        varindex = self.symbolTable.indexOf(self.currentToken)
         if varkind != 'NONE':
             # push the variable on the stack before the call command
-            self.vmWriter.writePush(varkind, self.symbolTable.indexOf(self.currentToken))
-            
+            self.vmWriter.writePush(varkind, varindex)
+
             method = True
-            
+
             # Save the name of the class variable is refering to
             className = self.symbolTable.typeOf(self.currentToken)
-            
+
             self.__printIdentifier(self.currentToken)
         # if className or subroutineName
         else:
             name = self.currentToken
             self.__printTag()
-        
+
         if self.currentToken == '.':
             # in the case of '.', it should be className.name(expressionList)
             # set className to name, only run if it's a class
             if name:
                 className = name
-        
+
             self.__eat(['.'])
 
             name = self.currentToken
             self.__printTag()  # subroutineName
+        # run only for 'subroutineName'
+        else:
+            # push the variable on the stack before the call command
+            self.vmWriter.writePush('POINTER', 0)
+
+            method = True
 
         self.__eat(['('])  # '('
         nArgs = self.compileExpressionList()
@@ -444,11 +451,11 @@ class CompilationEngine:
         # else add the current className in front of the subroutineName
         else:
             name = self.className + '.' + name
-        
+
         # if calling a method add one to the nArgs
         if method:
             nArgs += 1
-        
+
         # Write call vm command
         self.vmWriter.writeCall(name, nArgs)
 
@@ -691,6 +698,20 @@ class CompilationEngine:
 
         # StringConstant
         elif self.currentTokenType == 'stringConstant':
+            # Create the string constant using VM commands
+            string = self.currentToken
+            length = len(string)
+            
+            # VM commands to create a new string object of length
+            self.vmWriter.writePush('CONST', length)
+            self.vmWriter.writeCall('String.new', 1)
+            
+            # Create the stringConstant using series of call to String.append('c')
+            for i in range(length):
+                # push the character ascii value, 32-126 only
+                self.vmWriter.writePush('CONST', ord(string[i]))
+                self.vmWriter.writeCall('String.appendChar', 2)
+            
             self.__printTag()
 
         # keywordConstant
@@ -757,15 +778,15 @@ class CompilationEngine:
 
             elif self.currentToken == '.':  # (className | varName) '.' subroutineName '(' expressionList ')'
                 self.__eat(['.'])
-                
+
                 varkind = self.symbolTable.kindOf(self.currentToken)
                 if varkind != 'NONE':
                     # push the variable on the stack before the call command
                     self.vmWriter.writePush(varkind, self.symbolTable.indexOf(self.currentToken))
-                    
+
                     # Save the name of the class variable is refering to
                     name = self.symbolTable.typeOf(name)
-                    
+
                 # Create the full call subroutine name with its className append at front
                 name = name + '.' + self.currentToken
 
