@@ -788,6 +788,9 @@ class CompilationEngine:
                 # push the variable value on to the stack
                 self.vmWriter.writePush(varkind, varindex)
                 
+                # change name of the variable to its type ie. className
+                name = self.symbolTable.typeOf(self.currentToken)
+                
                 self.__printIdentifier(self.currentToken)
             # subroutineName | className
             else:
@@ -822,14 +825,6 @@ class CompilationEngine:
 
             elif self.currentToken == '.':  # (className | varName) '.' subroutineName '(' expressionList ')'
                 self.__eat(['.'])
-
-                varkind = self.symbolTable.kindOf(self.currentToken)
-                if varkind != 'NONE':
-                    # push the variable on the stack before the call command
-                    self.vmWriter.writePush(varkind, self.symbolTable.indexOf(self.currentToken))
-
-                    # Save the name of the class variable is refering to
-                    name = self.symbolTable.typeOf(name)
 
                 # Create the full call subroutine name with its className append at front
                 name = name + '.' + self.currentToken
