@@ -781,12 +781,12 @@ class CompilationEngine:
 
             name = self.currentToken
 
-            # varName #!!!
+            # varName
             varkind = self.symbolTable.kindOf(self.currentToken)
             varindex = self.symbolTable.indexOf(self.currentToken)
             if varkind != 'NONE':
                 # push the variable value on to the stack
-                self.vmWriter.writePush(varkind, varrindex)
+                self.vmWriter.writePush(varkind, varindex)
                 
                 self.__printIdentifier(self.currentToken)
             # subroutineName | className
@@ -795,7 +795,22 @@ class CompilationEngine:
 
             if self.currentToken == '[':  # varName '[' expression ']'
                 self.__eat(['['])
+                
+                # when it is an array call
+                # 1.) variable is already on the stack
+                # 2.) push the expression
                 self.compileExpression()
+                
+                # 3.) add
+                self.vmWriter.writeArithmetic('ADD')
+                
+                # to retrieve the value
+                # 4.) make THAT to point to array location
+                self.vmWriter.writePop('POINTER', 1)
+                
+                # 5.) push the value at the location to stack
+                self.vmWriter.writePush('THAT', 0)
+                
                 self.__eat([']'])
 
             elif self.currentToken == '(':  # subroutineName '(' expressionList ')'
