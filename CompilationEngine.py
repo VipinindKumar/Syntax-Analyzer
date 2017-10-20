@@ -780,7 +780,7 @@ class CompilationEngine:
             #                (className | varName) '.' subroutineName '(' expressionList ')'
 
             name = self.currentToken
-
+            method = False
             # varName
             varkind = self.symbolTable.kindOf(self.currentToken)
             varindex = self.symbolTable.indexOf(self.currentToken)
@@ -791,6 +791,7 @@ class CompilationEngine:
                 # change name of the variable to its type ie. className
                 name = self.symbolTable.typeOf(self.currentToken)
                 
+                method = True
                 self.__printIdentifier(self.currentToken)
             # subroutineName | className
             else:
@@ -832,7 +833,11 @@ class CompilationEngine:
                 self.__printTag()
                 self.__eat(['('])
                 nArgs = self.compileExpressionList()
-
+                
+                # add 1 to nArgs if method is True
+                if method:
+                    nArgs += 1
+                
                 # add call command after pushing all the parameters to stack
                 self.vmWriter.writeCall(name, nArgs)
 
