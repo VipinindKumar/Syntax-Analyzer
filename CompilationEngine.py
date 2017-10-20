@@ -419,6 +419,7 @@ class CompilationEngine:
             className = self.symbolTable.typeOf(self.currentToken)
 
             self.__printIdentifier(self.currentToken)
+        
         # if className or subroutineName
         else:
             name = self.currentToken
@@ -498,18 +499,45 @@ class CompilationEngine:
         # if it's an array
         if self.currentToken == '[':
             self.__eat(['['])
+            
+            # When it is an array
+            # 1.) push the variable
+            self.vmWriter.writePush(self.symbolTable.kindOf(variable), self.symbolTable.indexOf(variable))
+            
+            # 2.) compute and push the value of expresssion
             self.compileExpression()
+            
+            # 3.) add
+            self.vmWriter.writeArithmetic('ADD')
+            
             self.__eat([']'])
-
-        self.__eat(['='])
-
-        self.compileExpression()
-
-        # after compiling expression value, pop the value into the variable
-        self.vmWriter.writePop(self.symbolTable.kindOf(variable), self.symbolTable.indexOf(variable))
-
+            self.__eat(['='])
+            
+            # 4.) computer and push the value of expression
+            self.compileExpression()
+            
+            # 5.) pop the value of last expression in temp
+            self.vmWriter.writePop('TEMP', 0)
+            
+            # 6.) set THAT to the array location from value before '='
+            self.vmWriter.writePop('POINTER', 1)
+            
+            # 7.) Now push the value saved in the temp onto the stack
+            self.vmWriter.writePush('TEMP', 0)
+            
+            # 8.) Put the value in the array location in THAT
+            self.vmWriter.writePop('THAT', 0)
+        
+        else:
+            self.__eat(['='])
+            
+            self.compileExpression()
+            
+            # after compiling expression value, pop the value into the variable
+            self.vmWriter.writePop(self.symbolTable.kindOf(variable), self.symbolTable.indexOf(variable))
+        
         self.__eat([';'])
-
+        
         self.tabs -= 1
         self.__printTabs()
         self.out.write('</letStatement>\n')
@@ -753,12 +781,13 @@ class CompilationEngine:
 
             name = self.currentToken
 
-            # varName
-            kind = self.symbolTable.kindOf(self.currentToken)
-            if kind != 'NONE':
+            # varName #!!!
+            varkind = self.symbolTable.kindOf(self.currentToken)
+            varindex = self.symbolTable.indexOf(self.currentToken)
+            if varkind != 'NONE':
                 # push the variable value on to the stack
-                self.vmWriter.writePush(kind, self.symbolTable.indexOf(self.currentToken))
-
+                self.vmWriter.writePush(varkind, varrindex)
+                
                 self.__printIdentifier(self.currentToken)
             # subroutineName | className
             else:
